@@ -7,43 +7,52 @@ Retail & Commerce: Intelligent Customer and Business Experiences
 Varelyx - evidence-driven retail continuity intelligence.
 
 ## One-line pitch
-When a retail operating plan breaks, Varelyx identifies the evidence that matters, asks for the missing fact most likely to change the decision, explores plausible futures, computes a feasible response, proves it against hard rules, and only then turns it into execution-ready actions.
+When a retail operating plan breaks, Varelyx identifies the evidence that matters, asks for the missing fact most likely to change the decision, computes feasible responses, proves them against hard rules, and only then turns a verified plan into execution-ready actions.
 
 ## Why GenAI is necessary
-Operational disruptions arrive as messy language, voice notes, PDFs, and ambiguous supplier messages. Gemini converts that evidence into structured state, detects unresolved facts, and produces focused evidence requests. It does not invent inventory quantities. OR-Tools handles constrained decisions and an independent Proof Gate verifies policy before action.
+Operational disruptions arrive as messy language and ambiguous supplier messages. Gemini converts that evidence into structured operational state and generates a focused evidence request for the most decision-critical unknown. Gemini does **not** invent order quantities. Deterministic constrained logic computes quantities and an independent Proof Gate verifies hard rules before action.
 
-## Google stack used by this prototype
-- Gemini through Google GenAI and Vertex AI for text/audio disruption extraction and focused question generation.
-- Cloud Run deployment target.
-- Firestore optional durable action/audit storage.
-- OR-Tools for deterministic optimization.
+## Google stack used by the submitted web prototype
+- Firebase Hosting on the Spark plan.
+- Firebase AI Logic.
+- Gemini Developer API.
+- Firebase App Check with reCAPTCHA Enterprise.
+- Firebase Anonymous Authentication.
+- Firebase Realtime Database.
+- Deterministic constrained solver and independent Proof Gate.
+
+The older FastAPI / OR-Tools / Cloud Run implementation remains an optional engineering reference in the repository, but it is not the primary no-card competition deployment.
 
 ## Differentiation
 1. Explicit Known / Estimated / Unknown evidence state.
-2. Next Best Question ranked by decision value.
-3. Scenario robustness instead of a single confident forecast.
-4. Mathematical optimization for quantities and feasibility.
-5. Independent Proof Gate that can block an AI-style proposal.
-6. Human approval before execution objects.
-7. Shadow Mode comparison before asking operators to switch systems.
+2. Next Best Question focused on decision value.
+3. Multiple response strategies instead of one confident recommendation.
+4. Deterministic quantities and feasibility.
+5. Independent Proof Gate that can reject an AI-style unsafe proposal.
+6. Human approval before action objects.
+7. Persistent execution objects and audit state.
+8. Shadow Mode comparison with simulation labels.
 
 ## Three-minute demo flow
-1. Show controlled Bangladesh Continuity Twin: 250 stores, 1,200 SKUs, 6 suppliers.
-2. Analyze Bangla/Banglish supplier disruption: 48-hour delay, two affected routes, capacity unknown.
-3. Show DECISION NOT READY and the highest-value unknown.
-4. Confirm Supplier B Thursday capacity = 120 cases.
-5. Show current, cheapest, balanced, and maximum-availability strategies.
+1. Show the controlled Bangladesh Continuity Twin: 250 stores, 1,200 SKUs, 6 suppliers.
+2. Analyze the Bangla/Banglish disruption with **live Gemini**.
+3. Point out DECISION NOT READY and the missing Supplier B Thursday capacity.
+4. Confirm capacity = 120 cases.
+5. Compare current, cheapest, balanced, and maximum-availability strategies.
 6. Prove balanced plan -> PASS.
-7. Prove unverified aggressive proposal -> BLOCK with exact violated constraints.
-8. Approve and dispatch balanced plan -> real backend action objects appear.
-9. Show Shadow Mode, explicitly labelled controlled simulation.
-10. End on: Know what matters. Ask what is missing. Prove what works. Then act.
+7. Prove the unsafe aggressive proposal -> BLOCK and show violated constraints.
+8. Approve the balanced plan -> persistent Firebase action objects appear.
+9. Refresh to show persistence.
+10. Show Shadow Mode and explicitly state that the numbers are controlled simulation.
 
 ## Claims discipline
-Do not claim observed retailer impact. Current impact metrics are controlled simulation outputs. Real-world claims require pilot evidence.
+Do not claim observed retailer impact, customers, pilots, or production results unless independently verified. Current impact metrics are controlled simulation outputs.
 
-## Owner-side submission actions
-- Complete eligible team registration in the competition portal.
-- Deploy this repository to the owner's Google Cloud project.
-- Record and publish the maximum 3-minute demo video.
-- Upload the required proposal/deck and live prototype URL.
+## Final owner-side submission actions
+- Maintain an eligible 2-4 person team before the official team deadline.
+- Deploy the public Firebase Hosting build.
+- Verify a real Gemini response in production.
+- Record and publish the <=3-minute public demo video.
+- Prepare/upload the required proposal/deck PDF.
+- Confirm the exact Retail & Commerce problem/category in the live portal.
+- Submit the live prototype URL before the official deadline.
