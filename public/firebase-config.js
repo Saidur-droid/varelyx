@@ -1,7 +1,7 @@
 export const firebaseConfig = {
   apiKey: "AIzaSyBQ8rUuIG68kLPkc6hgrxLxsJV_9UrzmYA",
   authDomain: "varelyx-ai-builder-cup.firebaseapp.com",
-  databaseURL: "https://varelyx-ai-builder-cup-default-rtdb.firebaseio.com",
+  databaseURL: "https://varelyx-ai-builder-cup-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "varelyx-ai-builder-cup",
   storageBucket: "varelyx-ai-builder-cup.firebasestorage.app",
   messagingSenderId: "32966208347",
