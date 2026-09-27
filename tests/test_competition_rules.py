@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
 
-RULES = json.loads((Path(__file__).resolve().parents[1] / "competition_rules.json").read_text())
+ROOT = Path(__file__).resolve().parents[1]
+RULES = json.loads((ROOT / "competition_rules.json").read_text())
 
 
 def test_authoritative_rule_override_is_locked():
@@ -20,15 +21,20 @@ def test_eligibility_and_deadlines_are_locked():
     assert RULES["timeline"]["prototype_submission_deadline"] == "2026-10-18"
 
 
-def test_varelyx_competition_path_is_locked():
+def test_cardless_firebase_path_is_locked():
     v = RULES["varelyx"]
     assert v["theme"].startswith("Retail & Commerce")
     assert v["google_ai_required"] is True
     assert v["cloud_deployment_required"] is True
-    assert v["primary_deployment"] == "Cloud Run"
-    assert v["live_google_ai_must_be_verified_before_submission"] is True
+    assert v["primary_deployment"].startswith("Firebase Hosting")
+    assert "Gemini Developer API" in v["primary_ai_path"]
+    assert v["billing_account_required_for_primary_path"] is False
+    assert v["payment_method_required_for_primary_path"] is False
+    assert v["cloud_run_optional"] is True
+    assert v["vertex_ai_optional"] is True
     assert v["vercel_required"] is False
     assert v["supabase_required"] is False
+    assert v["live_google_ai_must_be_verified_before_submission"] is True
 
 
 def test_submission_package_requirements_are_locked():
@@ -41,10 +47,17 @@ def test_submission_package_requirements_are_locked():
 
 
 def test_judging_weights_total_100():
-    j = RULES["judging"]
-    assert sum(j.values()) == 100
+    assert sum(RULES["judging"].values()) == 100
 
 
 def test_integrity_guardrails_are_locked():
-    i = RULES["integrity"]
-    assert all(i.values())
+    assert all(RULES["integrity"].values())
+
+
+def test_static_firebase_submission_assets_exist():
+    for p in ["firebase.json","database.rules.json","public/index.html","public/app.js","public/firebase-config.js"]:
+        assert (ROOT / p).exists()
+    app = (ROOT / "public/app.js").read_text()
+    assert "GoogleAIBackend" in app
+    assert "gemini-3.5-flash-lite" in app
+    assert "firebase-database.js" in app

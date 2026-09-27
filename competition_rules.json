@@ -44,7 +44,12 @@
       "Firebase",
       "Google Cloud Platform"
     ],
-    "primary_deployment": "Cloud Run",
+    "primary_deployment": "Firebase Hosting on Spark",
+    "primary_ai_path": "Firebase AI Logic with Gemini Developer API free tier",
+    "billing_account_required_for_primary_path": false,
+    "payment_method_required_for_primary_path": false,
+    "cloud_run_optional": true,
+    "vertex_ai_optional": true,
     "vercel_required": false,
     "supabase_required": false,
     "live_google_ai_must_be_verified_before_submission": true
@@ -77,7 +82,7 @@
   },
   "known_ambiguities": [
     {
-      "issue": "Themes page lists Retail & Commerce, while a lower Category Specification block contains older social-impact category wording.",
+      "issue": "Themes page lists Retail & Commerce while a lower Category Specification block contains older social-impact wording.",
       "rule": "Use live portal options for final form fields; do not invent a category; seek organizer clarification if materially conflicting."
     }
   ]

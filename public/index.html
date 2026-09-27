@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Varelyx — Retail Continuity Intelligence</title>
+  <meta name="description" content="Evidence-driven retail continuity intelligence built with Firebase AI Logic and Gemini.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <div><span class="logo">VARELYX</span><span class="tag">Retail continuity intelligence</span></div>
+  <div id="cloudState" class="pill">Connecting to Firebase…</div>
+</header>
+<main>
+  <section class="hero panel">
+    <div>
+      <div class="eyebrow">CONTROLLED BANGLADESH CONTINUITY TWIN</div>
+      <h1>Know what matters. Ask what’s missing. <span>Prove what works.</span> Then act.</h1>
+      <p>Gemini structures messy disruption evidence. A deterministic optimizer computes feasible responses. The Proof Gate can block unsafe plans before approval.</p>
+      <div class="techline">Firebase Hosting · Firebase AI Logic · Gemini Developer API · Realtime Database</div>
+    </div>
+    <div class="hero-actions">
+      <button id="resetBtn" class="secondary">Reset demo</button>
+      <button id="analyzeBtn">Analyze disruption with Gemini</button>
+    </div>
+  </section>
+
+  <section id="setupWarning" class="panel warning hidden">
+    <b>Firebase setup required</b>
+    <p>Replace placeholders in <code>public/firebase-config.js</code>, enable Anonymous Authentication, Realtime Database, Firebase AI Logic (Gemini Developer API), and App Check. No billing account is required for this Spark/free-tier path.</p>
+  </section>
+
+  <section class="metrics" id="metrics"></section>
+
+  <section class="grid two">
+    <div class="panel">
+      <div class="section-title"><span>01</span> Evidence Board</div>
+      <div id="decisionBanner" class="decision-banner"></div>
+      <div class="evidence-columns">
+        <div><h3>Known</h3><div id="known"></div></div>
+        <div><h3>Estimated</h3><div id="estimated"></div></div>
+        <div><h3>Unknown</h3><div id="unknown"></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title"><span>02</span> Evidence Scout</div>
+      <label for="disruptionInput">Supplier / operations evidence</label>
+      <textarea id="disruptionInput" rows="5">Eid er age Supplier B delivery 48 hours late. 2 routes affected. Thursday capacity ekhono confirm hoy nai.</textarea>
+      <div id="geminiResult" class="resultBox"></div>
+      <div id="questionBox"></div>
+      <div class="answer-row">
+        <input id="capacityInput" type="number" min="0" value="120" aria-label="Supplier B confirmed capacity">
+        <button id="answerBtn">Confirm supplier answer</button>
+      </div>
+      <p class="hint">Controlled demo answer: Supplier B confirms a maximum of 120 cases by Thursday.</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-title"><span>03</span> Scenario Room</div>
+    <div id="strategies" class="strategy-grid"></div>
+  </section>
+
+  <section class="grid two">
+    <div class="panel">
+      <div class="section-title"><span>04</span> Proof Gate</div>
+      <div class="proof-actions">
+        <button data-proof="balanced">Prove balanced plan</button>
+        <button data-proof="unverified-aggressive" class="danger">Try unsafe proposal</button>
+      </div>
+      <div id="proof"></div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title"><span>05</span> Action Center</div>
+      <button id="approveBtn">Approve & persist actions</button>
+      <div id="actions"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-title"><span>06</span> Shadow Mode</div>
+    <div id="shadow"></div>
+    <p class="hint">All impact values are controlled-simulation outputs, not observed retailer outcomes.</p>
+  </section>
+</main>
+<footer>Varelyx · Built in Bangladesh · Designed for volatile commerce everywhere.</footer>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
