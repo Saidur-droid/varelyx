@@ -2,55 +2,87 @@
 
 **Know what matters. Ask what is missing. Prove what works. Then act.**
 
-Varelyx is an evidence-driven retail continuity prototype for the Google Cloud AI Builder Cup 2026, Retail & Commerce theme. It turns disruption and incomplete evidence into proof-gated, execution-ready actions.
+Varelyx is an evidence-driven retail continuity prototype for the Google Cloud AI Builder Cup 2026, Retail & Commerce theme.
 
-## Working MVP
+## Competition deployment path
 
-The repository now contains a runnable end-to-end prototype:
+The final no-card competition path is:
 
-disruption -> structured evidence -> Known/Estimated/Unknown -> Next Best Question -> confirmed evidence -> OR-Tools strategies -> Proof Gate -> human approval -> persistent action objects
+**Firebase Hosting (Spark) -> Firebase AI Logic -> Gemini Developer API -> Anonymous Firebase Auth -> Realtime Database**
 
-### What works
+No Vercel. No Supabase. No Blaze upgrade is required for the primary submission path.
 
-- Command-center UI with Evidence Board, Scenario Room, Proof Gate, Action Center, and Shadow Mode.
-- Bangla, Banglish, and English disruption extraction through Gemini when Vertex AI or API credentials are available, with deterministic fallback.
-- Audio evidence endpoint for prerecorded supplier notes.
-- Decision-critical unknown ranking and Gemini-generated Next Best Question with safe fallback.
-- Deterministic OR-Tools optimization under working-capital, supplier capacity, MOQ/pack, donor-safety-stock, and route constraints.
-- Independent Proof Gate with PASS, HOLD, and BLOCK.
-- Deliberately unsafe proposal that the gate rejects to prove AI cannot bypass mathematics.
-- Human approval that creates real backend transfer orders, purchase-order drafts, supplier escalations, and manager tasks.
-- Idempotent approval path.
-- CSV ingestion endpoints for sales and inventory.
-- File persistence locally; optional Firestore persistence on Google Cloud.
-- Cloud Run Docker deployment.
-- GitHub Actions CI and engine/API tests covering the hero flow and critical constraints.
+The public web prototype uses Gemini to interpret messy Bangla/Banglish/English disruption evidence and generate a focused evidence question. Operational quantities are computed by deterministic constrained logic, not invented by the model. An independent Proof Gate can HOLD or BLOCK unsafe plans before human approval.
 
-## No Vercel or Supabase required
+## Current working flow
 
-Neither is used. The competition deployment path is Cloud Run plus Vertex AI Gemini, with optional Firestore for durable state.
+1. Analyze a disruption message with Gemini.
+2. Separate Known / Estimated / Unknown evidence.
+3. Surface the highest-value missing fact.
+4. Confirm Supplier B Thursday capacity.
+5. Recompute current / cheapest / balanced / maximum-availability plans.
+6. Prove the balanced plan -> PASS.
+7. Try an intentionally unsafe proposal -> BLOCK.
+8. Approve the verified plan.
+9. Persist action objects in Firebase Realtime Database.
+10. Compare the response in Shadow Mode.
 
-## Run locally
+All impact values in the demo are controlled-simulation outputs, not observed retailer results.
 
-Create a Python 3.12 virtual environment, install requirements.txt, run pytest, then launch:
+## Google/Firebase stack
 
-    uvicorn app.main:app --reload --port 8080
+- Firebase Hosting — public competition web app.
+- Firebase AI Logic — client integration to Gemini.
+- Gemini Developer API — live generative evidence understanding.
+- Firebase App Check + reCAPTCHA Enterprise — abuse protection.
+- Firebase Anonymous Authentication — isolated judge/browser demo sessions.
+- Firebase Realtime Database — persisted session/action state.
+- Deterministic constrained solver + Proof Gate — quantities and hard-rule verification.
 
-Open http://localhost:8080.
+The repository also keeps the earlier FastAPI / OR-Tools backend prototype and Cloud Run Docker path as an optional engineering reference. It is **not required** for the no-card competition deployment.
 
-## Cloud Run
+## Firebase project
 
-See docs/DEPLOY_GCP.md.
+Project ID:
 
-## Demo
+    varelyx-ai-builder-cup
 
-1. Reset demo.
-2. Analyze disruption.
-3. Confirm Supplier B Thursday capacity = 120.
-4. Compare current, cheapest, balanced, and maximum-availability strategies.
-5. Prove balanced plan -> PASS.
-6. Try unverified aggressive proposal -> BLOCK.
-7. Approve and dispatch balanced plan.
-8. Inspect persistent backend action objects and Shadow Mode.
+Expected public URL after deployment:
 
-The Bangladesh Continuity Twin and its impact numbers are explicitly controlled-simulation outputs, not claims of observed retailer results.
+    https://varelyx-ai-builder-cup.web.app
+
+## Deploy on Windows
+
+The project is already bound in `.firebaserc`.
+
+Double-click:
+
+    deploy-firebase.cmd
+
+The helper uses `npx firebase-tools`, opens Firebase login when needed, and deploys Hosting plus Realtime Database rules.
+
+Manual equivalent:
+
+    npx --yes firebase-tools@latest login
+    npx --yes firebase-tools@latest deploy --only hosting,database
+
+Do **not** run `firebase init`; the repository already contains the required Firebase configuration.
+
+## Required production verification
+
+After deployment, verify all of these on the public URL:
+
+- Header reports Firebase connected / Gemini ready.
+- Analyze disruption returns **LIVE GEMINI VERIFIED**.
+- Supplier capacity 120 resolves the critical unknown.
+- Balanced plan -> PASS.
+- Unsafe proposal -> BLOCK.
+- Approval creates backend action objects.
+- Refresh preserves the session state/actions.
+- Simulation values remain explicitly labelled.
+
+See:
+- `COMPETITION_RULES_LOCK.md`
+- `docs/FIREBASE_NO_CARD_DEPLOY.md`
+- `docs/SUBMISSION_READY.md`
+- `DEPLOYMENT_STATUS.md`
