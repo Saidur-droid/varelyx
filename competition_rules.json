@@ -1,0 +1,84 @@
+{
+  "competition": "Google Cloud AI Builder Cup 2026",
+  "verified_at": "2026-09-27",
+  "authority": {
+    "official_overrides_repo": true,
+    "official_urls": [
+      "https://aibuildercup.com/",
+      "https://aibuildercup.com/themes.html"
+    ],
+    "portal_is_authoritative_for_final_form_fields": true
+  },
+  "eligibility": {
+    "region": "JAPAC",
+    "minimum_age": 21,
+    "team_min": 2,
+    "team_max": 4,
+    "working_professionals_only": true,
+    "students_eligible": false,
+    "team_formation_deadline": "2026-10-11"
+  },
+  "timeline": {
+    "registration_start": "2026-09-01",
+    "team_formation_deadline": "2026-10-11",
+    "build_submission_start": "2026-09-07",
+    "prototype_submission_deadline": "2026-10-18",
+    "evaluation_start": "2026-10-19",
+    "evaluation_end": "2026-11-06",
+    "finalists_announcement": "2026-11-07",
+    "grand_finale": "2026-12-04"
+  },
+  "varelyx": {
+    "theme": "Retail & Commerce: Intelligent Customer and Business Experiences",
+    "google_ai_required": true,
+    "accepted_ai_examples": [
+      "Gemini",
+      "Gemma",
+      "Agent Platform",
+      "Antigravity",
+      "AI Studio"
+    ],
+    "cloud_deployment_required": true,
+    "accepted_deployment_examples": [
+      "Cloud Run",
+      "Firebase",
+      "Google Cloud Platform"
+    ],
+    "primary_deployment": "Cloud Run",
+    "vercel_required": false,
+    "supabase_required": false,
+    "live_google_ai_must_be_verified_before_submission": true
+  },
+  "submission": {
+    "working_prototype_required": true,
+    "proposal_pdf_required": true,
+    "public_demo_video_required": true,
+    "demo_video_max_minutes": 3,
+    "public_video_hosts": [
+      "YouTube",
+      "Vimeo",
+      "public Google Drive"
+    ],
+    "english_materials_required": true,
+    "problem_or_theme_must_be_specified": true
+  },
+  "judging": {
+    "technical_and_genai_percent": 40,
+    "problem_alignment_and_impact_percent": 25,
+    "innovation_and_creativity_percent": 25,
+    "ux_and_solution_design_percent": 10
+  },
+  "integrity": {
+    "no_fake_metrics": true,
+    "simulation_must_be_labeled": true,
+    "no_fake_critical_actions": true,
+    "no_llm_invented_quantities": true,
+    "no_secrets_in_repo": true
+  },
+  "known_ambiguities": [
+    {
+      "issue": "Themes page lists Retail & Commerce, while a lower Category Specification block contains older social-impact category wording.",
+      "rule": "Use live portal options for final form fields; do not invent a category; seek organizer clarification if materially conflicting."
+    }
+  ]
+}
