@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
 const css=await readFile(new URL('../public/styles.css',import.meta.url),'utf8');
+const app=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
 for(const id of ['appShell','commandCenter','evidenceWorkspace','scenarioWorkspace','proofWorkspace','actionWorkspace','auditWorkspace','systemStatusBar']) test('premium workspace includes #'+id,()=>assert.match(html,new RegExp('id=["\\\']'+id+'["\\\']')));
 test('scenario workspace includes direct comparison table',()=>assert.match(html,/id=["']strategyComparison["']/));
 test('proof workspace exposes a copy receipt control',()=>assert.match(html,/id=["']copyReceiptBtn["']/));
