@@ -17,3 +17,21 @@ test('responsive and keyboard accessibility contracts exist',()=>{assert.match(c
 test('signal and evidence investigation anchors exist',()=>{for(const id of ['signalPanel','evidenceMatrix','evidenceScout']) assert.match(html,new RegExp('id=["\\\']'+id+'["\\\']'));});
 test('evidence states include Confirmed Estimated Unknown and Stale labels',()=>{for(const label of ['Confirmed','Estimated','Unknown','Stale']) assert.match(html,new RegExp(label));});
 test('evidence scout explains why the question matters',()=>{assert.match(html,/WHY THIS MATTERS/);assert.match(html,/decision bottleneck/i);});
+
+test('decision surface has selected candidate and compact alternatives',()=>{
+  for(const id of ['selectedCandidate','alternativeStrategies','proofOutcome','proofFreshness']) assert.match(html,new RegExp('id=["\\\']'+id+'["\\\']'));
+  assert.match(html,/Balanced demo candidate/);
+  assert.doesNotMatch(html,/>Best</i);
+});
+test('decision comparison names all operational tradeoffs',()=>{
+  for(const label of ['Transfer','Supplier B','Emergency','Cash','Expected stockout','Robustness']) assert.match(html,new RegExp(label,'i'));
+});
+test('proof gate exposes text states and rule observed result semantics',()=>{
+  for(const state of ['PASS','HOLD','BLOCK']) assert.match(html,new RegExp('>'+state+'<'));
+  assert.match(html,/Rule/); assert.match(html,/Observed/); assert.match(html,/Result/);
+});
+test('unsafe proposal remains a secondary destructive test',()=>assert.match(html,/data-proof="unverified-aggressive" class="danger"/));
+test('receipt and long proof content are locally contained',()=>{
+  assert.match(html,/server-authoritative procurement approval/);
+  assert.match(css,/overflow-wrap:anywhere/);
+});
