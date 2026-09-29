@@ -1,26 +1,33 @@
 name: ci
+
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
   web:
+    name: web-contracts
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install Node test dependencies
+        run: npm install --no-audit --no-fund
       - name: Check JavaScript syntax
-        run: |
-          for file in public/*.js public/*.mjs; do node --check "$file"; done
-      - name: Test evidence, solver, Proof Gate and persistence contracts
-        run: node --test tests/web.test.mjs
-  test:
+        run: npm run check:js
+      - name: Test evidence solver Proof Gate persistence UI and CI contracts
+        run: npm run test:node
+
+  python:
+    name: python-reference
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -32,3 +39,29 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m compileall -q app tests
       - run: PYTHONPATH=. pytest -q
+
+  browser:
+    name: browser-smoke
+    needs: web
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Start local static server
+        run: |
+          python3 -m http.server 4173 -d public > /tmp/varelyx-http.log 2>&1 &
+          echo $! > /tmp/varelyx-http.pid
+          for i in {1..20}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && exit 0; sleep 1; done
+          cat /tmp/varelyx-http.log
+          exit 1
+      - name: Browser smoke
+        env:
+          BASE_URL: http://127.0.0.1:4173
+        run: npm run test:e2e
