@@ -9,6 +9,8 @@ for(const id of ['appShell','commandCenter','evidenceWorkspace','scenarioWorkspa
   test('premium workspace includes #'+id,()=>assert.match(html,new RegExp('id=["\\\']'+id+'["\\\']')));
 }
 
+test('premium HTML contains no literal escaped newline artifacts',()=>assert.doesNotMatch(html,/\\\\n/));
+
 test('scenario workspace includes direct comparison table',()=>assert.match(html,/id=["']strategyComparison["']/));
 test('proof workspace exposes a copy receipt control',()=>assert.match(html,/id=["']copyReceiptBtn["']/));
 test('human approval boundary is explicit',()=>assert.match(html,/HUMAN APPROVAL REQUIRED/));
