@@ -2,9 +2,17 @@
 
 Date: 2026-09-29
 Branch: fix/firebase-verification-20260929
-Status: Design specification for review before implementation
+Status: Approved design direction; written spec pending final user review before implementation plan
 
-## 1. Purpose
+## 1. Product category and purpose
+
+Varelyx sits at the intersection of:
+
+- **AI-powered Supply Chain Decision Intelligence**
+- **Retail Supply Chain Control Tower**
+- **Disruption Decision Management**
+
+It is not a generic analytics dashboard, shipment tracker, forecasting screen, or chatbot. Its core job is to help an operator move from an uncertain disruption signal to a defensible, verified, human-approved response.
 
 Turn Varelyx from a technically credible demo into a premium, judge-ready retail decision workspace that can also become a commercial product after the AI Builder Cup.
 
@@ -75,7 +83,40 @@ The product must:
 - Any new analytics must not become a critical runtime dependency for the judge flow.
 - The final submission must eventually satisfy the separate public-repository, team eligibility, live URL, deck and sub-three-minute video requirements before release/submission.
 
-## 4. Product experience principles
+## 4. Competitive reference synthesis and originality rules
+
+The design should learn from strong interaction principles in leading supply-chain decision products without reproducing any one product's layout, visual identity, component arrangement, wording, or proprietary workflow.
+
+Reference principles:
+
+- **Kinaxis Maestro** — connected decision-making, scenario continuity, and fast movement from disruption to response.
+- **Blue Yonder Supply Chain Command Center** — command-center hierarchy, end-to-end operational context, and prescriptive-action framing.
+- **o9 Digital Brain** — context-rich planning, connected commercial/operational information, and analytical depth.
+- **project44** — operational clarity, real-time decision-intelligence framing, and strong exception visibility.
+- **FourKites Intelligent Control Tower** — clear signal -> reason -> act narrative, digital-twin style impact tracing, and visible auditability.
+
+Originality requirements:
+
+- Do not reproduce any competitor's page structure one-for-one.
+- Do not copy proprietary labels, illustrations, iconography, screen arrangements, screenshots, charts, or branded interaction patterns.
+- Do not visually imitate a single reference product closely enough that the source is obvious.
+- Use Varelyx's own information hierarchy: **KNOW -> ASK -> DECIDE -> PROVE -> ACT**.
+- Preserve Varelyx's distinctive evidence uncertainty model, Proof Gate, stale-proof invalidation, verified persistence, and human approval boundary.
+- Prefer synthesis: combine general enterprise UX principles from multiple references with Varelyx-specific product logic.
+
+### 4.1 Design benchmark
+
+The target is not “looks like a hackathon demo.” The target is “credible enterprise operations software with a distinctive decision-safety layer.”
+
+The interface should feel:
+- calm under pressure
+- dense but legible
+- operational rather than promotional
+- explainable rather than magical
+- premium without decorative excess
+- fast to scan at executive and operator levels
+
+## 5. Product experience principles
 
 ### 4.1 Decision-first, not dashboard-first
 The first screen answers:
@@ -108,18 +149,20 @@ Important decisions expose:
 - save verification
 - timestamp
 
-## 5. Information architecture
+## 6. Information architecture
 
 The current single long page becomes a focused application shell.
 
 ### Global shell
 Left navigation:
 - Command Center
-- Evidence
+- Signal & Evidence
 - Scenarios
 - Proof Gate
-- Actions
+- Human Approval
 - Audit
+
+The shell should behave like an operations workspace, not a marketing landing page. The first viewport should prioritize active incident context, decision state, unresolved evidence, and the next operator action above descriptive copy.
 
 Top bar:
 - Varelyx logo
@@ -137,22 +180,24 @@ Primary status indicators:
 - Proof PASS / HOLD / BLOCK
 - Save Verified / Not Verified
 
-## 6. Hero screen — Command Center
+## 7. Command Center — operational opening screen
 
-### Header
+### Operational header
 Eyebrow: Retail Continuity Decision Workspace
 
-Headline:
-**Turn disruption into a decision you can prove.**
+Primary incident statement:
+**Supplier B delay threatens Thursday availability.**
 
-Supporting copy:
-Gemini structures messy supplier evidence. Varelyx exposes uncertainty, asks for decision-changing facts, computes feasible responses and blocks plans that violate encoded constraints.
+Supporting status:
+Show the active incident, current risk, unresolved evidence count, expected stockout exposure, decision status, and next-best action before any long explanation.
 
 Primary CTA:
 **Analyze disruption**
 
 Secondary CTA:
-**View demo flow**
+**Inspect evidence**
+
+The line **“Turn disruption into a decision you can prove.”** remains part of Varelyx's product identity, but should not dominate the screen like a marketing hero. The Command Center must immediately feel operational.
 
 ### Decision timeline
 A horizontal five-stage rail:
@@ -175,9 +220,20 @@ Four cards:
 - Expected stockout under balanced plan
 - Robustness
 
+Add a compact **Decision State** block showing:
+- current phase
+- unresolved evidence count
+- proof state
+- persistence state
+- next best action
+
+The operator should be able to answer “what needs my attention now?” in under five seconds.
+
 All simulated values carry a small “Controlled simulation” label.
 
-## 7. Evidence workspace
+## 8. Signal & Evidence workspace
+
+The Evidence workspace should feel like a structured investigation surface, not a list of AI output.
 
 Three-column evidence board:
 
@@ -198,8 +254,8 @@ Each evidence item contains:
 - status
 - provenance
 
-### Evidence Scout
-The highest-value missing question is elevated as a single card:
+### Evidence Scout — Varelyx signature interaction
+The highest-value missing question is elevated as a single priority card and visually treated as the decision bottleneck:
 **What maximum number of cases can Supplier B deliver by Thursday?**
 
 Show:
@@ -211,7 +267,7 @@ Show:
 
 Do not show a fake “AI score” without explanation.
 
-## 8. Scenario workspace
+## 9. Scenario workspace
 
 Replace four dense equal cards with a comparison hierarchy:
 
@@ -240,7 +296,7 @@ A comparison table allows direct side-by-side trade-offs.
 
 No false “best” wording. Use “Balanced demo candidate” or “Selected for proof”.
 
-## 9. Proof Gate
+## 10. Proof Gate
 
 This is the product’s signature screen.
 
@@ -280,7 +336,7 @@ After proof:
 Explain:
 “Receipt binds the current controlled evidence, plan and checks. It is not a blockchain attestation or server-authoritative procurement approval.”
 
-## 10. Action Center
+## 11. Human Approval & Action Center
 
 Human approval is visually separate from AI and Proof Gate.
 
@@ -304,7 +360,7 @@ After verified Firebase persistence:
 
 Global banner only shows **SAVE VERIFIED** after remote read-back matches the write.
 
-## 11. Shadow Mode
+## 12. Shadow Mode
 
 Use an elegant before/after visualization:
 - Current response
@@ -317,7 +373,7 @@ Always show:
 
 Do not overstate ROI.
 
-## 12. Audit timeline
+## 13. Audit timeline
 
 A compact timeline makes technical rigor legible:
 - Firebase session established
@@ -330,9 +386,13 @@ A compact timeline makes technical rigor legible:
 
 Every event includes time and relevant receipt/revision where available.
 
-## 13. Visual direction
+## 14. Visual direction
 
-Premium enterprise decision-intelligence aesthetic:
+Premium **industrial decision-intelligence** aesthetic.
+
+The visual system should sit between an enterprise control tower and a modern AI workspace, while remaining unmistakably Varelyx.
+
+Foundation:
 - Dark neutral foundation rather than neon-heavy sci-fi.
 - Warm off-white text.
 - Emerald used only for confirmed/pass states.
@@ -343,6 +403,13 @@ Premium enterprise decision-intelligence aesthetic:
 - Minimal gradients.
 - Data should feel trustworthy, not decorative.
 
+Interaction density:
+- Use fewer, larger information zones rather than dozens of equal cards.
+- Prefer compact tables, structured rows, and progressive drill-down when comparing operational facts.
+- Keep critical numbers aligned and scannable.
+- Reserve large typography for incident state, proof status, and decisive outcomes.
+- Use subtle depth and motion only to clarify state transitions.
+
 Avoid:
 - excessive glassmorphism
 - glowing “AI” gimmicks
@@ -351,7 +418,7 @@ Avoid:
 - dashboard clutter
 - colorful charts with no decision purpose
 
-## 14. Interaction details
+## 15. Interaction details
 
 - Command Center shows one clear next action at a time.
 - Button labels describe outcomes, not generic verbs.
@@ -363,7 +430,7 @@ Avoid:
 - Keyboard navigation must cover the complete judge flow.
 - Mobile stacks into a single decision timeline; status chips remain visible.
 
-## 15. Judge demo choreography
+## 16. Judge demo choreography
 
 Target: 60–90 seconds for core value, under 3 minutes total submission video.
 
@@ -383,7 +450,7 @@ Target: 60–90 seconds for core value, under 3 minutes total submission video.
 14. Show Shadow Mode and receipt/audit trail.
 15. Close with differentiation: uncertainty-aware decisioning, not a generic chatbot.
 
-## 16. Analytics plan
+## 17. Analytics plan
 
 Analytics is observational only and must not block the product.
 
@@ -407,7 +474,7 @@ Session -> Gemini Verified -> Evidence Reviewed -> PASS -> Approval -> Save Veri
 
 Do not capture raw supplier evidence in third-party analytics by default.
 
-## 17. Files expected to change during implementation
+## 18. Files expected to change during implementation
 
 Likely:
 - public/index.html
@@ -426,7 +493,7 @@ Existing reliability logic in:
 
 must remain logically isolated and should not be weakened to simplify styling.
 
-## 18. Testing and acceptance
+## 19. Testing and acceptance
 
 ### Functional
 - Existing 31 Node tests stay passing.
@@ -456,7 +523,7 @@ Review at:
 The redesign must first deploy to a Firebase Hosting preview channel.
 Production must not be overwritten until the user reviews the preview link and explicitly approves it.
 
-## 19. Future-business readiness
+## 20. Future-business readiness
 
 The competition UI should already support an evolution path toward:
 - multi-location retailers
@@ -470,7 +537,7 @@ The competition UI should already support an evolution path toward:
 
 These are future extensions, not claims about the competition prototype.
 
-## 20. Non-goals for this design pass
+## 21. Non-goals for this design pass
 
 Do not add now:
 - real external purchase-order dispatch
@@ -482,4 +549,18 @@ Do not add now:
 - invented retailer KPIs
 - unnecessary 3D or animation-heavy visuals
 
-The objective is a reliable, elegant, differentiated decision workspace—not feature volume.
+The objective is a reliable, elegant, differentiated **Decision Command Center**—not feature volume.
+
+## 22. Final design identity
+
+The final Varelyx experience must make this sequence visually unmistakable:
+
+**KNOW -> ASK -> DECIDE -> PROVE -> ACT**
+
+- **KNOW:** grounded evidence and visible uncertainty.
+- **ASK:** identify the missing fact most likely to change the decision.
+- **DECIDE:** compare deterministic operational scenarios.
+- **PROVE:** verify constraints and invalidate unsafe or stale plans.
+- **ACT:** require explicit human approval and verified Firebase persistence.
+
+This is the core Varelyx product identity and must remain more prominent than any visual influence from external reference products.
