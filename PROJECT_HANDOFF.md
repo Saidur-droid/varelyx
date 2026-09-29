@@ -102,3 +102,20 @@ Earlier documentation reports a proposal deck/PDF prepared; their final files we
 100% complete requires live Gemini proof, PASS/BLOCK proof, verified remote persistence after reload, eligible team, final PDF, tested public video link, completed portal fields, accepted submission and saved confirmation evidence. These final gates remain open.
 
 After submission, tag the accepted commit, save final materials offline and keep the deployment stable through evaluation.
+
+
+## PC-independent CI/CD
+
+Preferred execution is **GitHub Actions -> OIDC/WIF -> Firebase Hosting preview -> Playwright**. Codespaces provides Node 22, Python 3.12, GitHub CLI and Google Cloud CLI. Remote Desktop is a fallback only.
+
+Repo additions:
+- `.github/workflows/firebase-preview.yml`
+- `.devcontainer/devcontainer.json`
+- `playwright.config.mjs`
+- `tests/e2e/smoke.spec.mjs`
+- `scripts/extract-firebase-preview-url.mjs`
+- `docs/CLOUD_CI_SETUP.md`
+
+Important: historical GitHub Actions failures still show no runner and `steps: null`; that remains an account/repository runner/billing/policy issue until GitHub-hosted jobs actually start. Do not treat it as an app assertion failure.
+
+Production remains manually gated.
