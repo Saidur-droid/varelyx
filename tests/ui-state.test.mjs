@@ -54,3 +54,40 @@ test('edited evidence after PASS marks proof stale and prevents approval', async
   assert.equal(vm.system.proof,'STALE');
   assert.notEqual(getPrimaryAction(vm).id,'approve');
 });
+
+test('fresh state reports operational incident status', () => {
+  const vm=buildViewModel(initialState(),'',true,null);
+  assert.equal(vm.incident.status,'UNANALYZED');
+  assert.equal(vm.decisionState,'WAITING_FOR_ANALYSIS');
+  assert.equal(vm.proofFreshness,'NOT_RUN');
+});
+
+test('analyzed but unreviewed state reports unresolved evidence', () => {
+  const vm=buildViewModel(analyzed(),source,true,null);
+  assert.ok(vm.unresolvedEvidenceCount > 0);
+  assert.equal(vm.decisionState,'WAITING_FOR_EVIDENCE_REVIEW');
+});
+
+test('reviewed state is ready for proof', () => {
+  const vm=buildViewModel(ready(),source,true,null);
+  assert.equal(vm.decisionState,'READY_FOR_PROOF');
+  assert.equal(vm.nextAction.id,'prove-balanced');
+});
+
+test('pass is ready for human approval', async () => {
+  const state=ready();
+  state.proof=await prove(plansFor(state).find(p=>p.id==='balanced'),state);
+  const vm=buildViewModel(state,source,true,{verified:true});
+  assert.equal(vm.decisionState,'READY_FOR_HUMAN_APPROVAL');
+  assert.equal(vm.nextAction.id,'approve');
+  assert.equal(vm.proofFreshness,'CURRENT');
+});
+
+test('edited source after pass reports stale proof operationally', async () => {
+  const state=ready();
+  state.proof=await prove(plansFor(state).find(p=>p.id==='balanced'),state);
+  const vm=buildViewModel(state,source+' edited',true,{verified:true});
+  assert.equal(vm.decisionState,'STALE_PROOF');
+  assert.equal(vm.proofFreshness,'STALE');
+  assert.equal(vm.nextAction.id,'analyze');
+});
