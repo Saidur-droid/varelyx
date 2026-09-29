@@ -53,3 +53,5 @@ test('small-screen layout contains page overflow and keeps local comparison scro
   assert.match(css,/overflow-x:hidden/);
   assert.match(css,/\.action-card[^}]*overflow-wrap:anywhere/);
 });
+
+test('unanalyzed unresolved evidence is not rendered as a fake number',()=>assert.match(app,/Not assessed/));
