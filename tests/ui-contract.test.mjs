@@ -14,3 +14,6 @@ test('command center exposes KNOW ASK DECIDE PROVE ACT',()=>{ for(const word of 
 test('opening workspace exposes unresolved evidence and decision state',()=>{assert.match(html,/Unresolved evidence/);assert.match(html,/Decision state/);assert.match(html,/Next best action/);});
 test('opening workspace is operational rather than marketing-only',()=>assert.doesNotMatch(html,/class="orb"/));
 test('responsive and keyboard accessibility contracts exist',()=>{assert.match(css,/@media\(max-width:390px\)/);assert.match(css,/:focus-visible/);assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);});
+test('signal and evidence investigation anchors exist',()=>{for(const id of ['signalPanel','evidenceMatrix','evidenceScout']) assert.match(html,new RegExp('id=["\\\']'+id+'["\\\']'));});
+test('evidence states include Confirmed Estimated Unknown and Stale labels',()=>{for(const label of ['Confirmed','Estimated','Unknown','Stale']) assert.match(html,new RegExp(label));});
+test('evidence scout explains why the question matters',()=>{assert.match(html,/WHY THIS MATTERS/);assert.match(html,/decision bottleneck/i);});
