@@ -15,7 +15,9 @@ test('preview workflow uses OIDC, gates deployment, and never deploys production
   const wf=await read('.github/workflows/firebase-preview.yml');
   assert.match(wf,/id-token:\s*write/);
   assert.match(wf,/contents:\s*read/);
-  assert.match(wf,/google-github-actions\/auth@/);
+  assert.match(wf,/actions\/checkout@v7/);
+  assert.match(wf,/google-github-actions\/auth@v3/);
+  assert.match(wf,/project_id:\s*\$\{\{\s*env\.FIREBASE_PROJECT_ID\s*\}\}/);
   assert.match(wf,/GCP_WORKLOAD_IDENTITY_PROVIDER/);
   assert.match(wf,/GCP_SERVICE_ACCOUNT/);
   assert.match(wf,/FIREBASE_PROJECT_ID/);
