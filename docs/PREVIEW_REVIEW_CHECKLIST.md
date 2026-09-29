@@ -10,7 +10,7 @@ Preview channel target: `premium-workspace`
 This preview exists so the product owner can review the competition-facing UI/UX before any production merge or Firebase production deploy.
 
 Core narrative:
-**Signal -> Evidence -> Decision -> Proof -> Human Approval -> Verified Persistence**
+**KNOW -> ASK -> DECIDE -> PROVE -> ACT -> Verified Persistence**
 
 ## Competition-facing design proof
 
@@ -26,16 +26,20 @@ Core narrative:
 
 ## Automated verification status
 
-- Historical reliability baseline before redesign: **31/31 Node tests passed** in the prior implementation session.
-- Red/green TDD evidence obtained for the new UI shell, view-model disconnected state, escaped-markup regression, and analytics adapter.
-- Current hosted GitHub Actions run still fails before reported steps: both jobs return no runner name / no steps. This does **not** prove a test assertion failure.
-- Full exact-branch test execution remains required on an authorized working machine because the connected Windows device is currently offline.
+- Local reconstructed verification mirror on 2026-09-29: **76/76 Node tests passed**, including the 31 reliability tests plus view-model, UI-contract and analytics tests.
+- Local Python regression: **13/13 pytest tests passed**.
+- All `public/*.js` and `public/*.mjs` passed `node --check`.
+- DOM contract scan found no duplicate IDs and no missing IDs referenced by `app.js`.
+- CSS parse check found balanced braces and no top-level parser errors.
+- TDD red/green cycles were observed for operational state, Command Center, investigation workspace, DECIDE/PROVE, and ACT/Audit contracts.
+- Latest hosted GitHub Actions run **36595560628** still fails before reported steps: both `web` and `test` jobs return `steps: null` and no runner. This does **not** establish a test assertion failure.
+- The authorized Windows device remains offline, so full exact-checkout verification, live browser QA, Firebase preview deployment, App Check/Auth preview-domain validation, and real Gemini/Firebase end-to-end QA remain required.
 
 ## Figma reference
 
 Figma file: https://www.figma.com/design/L96hoZxuZmi4I45jeP6Iqy
 
-The Figma design includes Command Center, system status, decision stages, metrics, Evidence Scout, Proof Gate, Scenario workspace, Human Approval, sandbox actions, Shadow Mode, and Audit.
+The Figma file remains the earlier premium workspace reference. A final sync attempt hit the Figma Starter-plan MCP call limit, so the **GitHub branch is the authoritative latest Decision Command Center design** until the Figma tool quota resets.
 
 ## Preview deployment gate
 
@@ -53,6 +57,7 @@ Then verify Auth/App Check accepts the returned preview domain. Do not weaken Ap
 ## Live review
 
 Preview URL: **PENDING — authorized device offline**
+Browser visual QA: **PENDING — local headless Chromium did not complete in this execution environment**
 Preview deployed at: **PENDING**
 Reviewed by product owner: [ ]
 Approved for production: [ ]
