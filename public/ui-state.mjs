@@ -33,7 +33,7 @@ export function getStageState(vm) {
 }
 
 export function getPrimaryAction(vm) {
-  if (!vm.state.liveVerified || vm.stale) return {id:'analyze', label:'Analyze disruption', disabled:!vm.system.firebase === 'VERIFIED'};
+  if (!vm.state.liveVerified || vm.stale) return {id:'analyze', label:'Analyze disruption', disabled:vm.system.firebase !== 'VERIFIED'};
   if (!vm.state.evidenceReviewed) return {id:'review-evidence', label:'Review evidence & confirm capacity', disabled:false};
   if (!vm.state.proof || vm.state.proof.status !== 'PASS') return {id:'prove-balanced', label:'Send balanced candidate to Proof Gate', disabled:false};
   return {id:'approve', label:'Approve sandbox actions', disabled:false};
