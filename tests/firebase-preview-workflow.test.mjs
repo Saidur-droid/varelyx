@@ -13,7 +13,10 @@ test('preview URL parser finds Firebase Hosting URLs and rejects missing URLs',(
 
 test('preview workflow uses OIDC, gates deployment, and never deploys production', async()=>{
   const wf=await read('.github/workflows/firebase-preview.yml');
-  assert.match(wf,/id-token:\s*write/);
+  assert.match(wf,/deploy:[\s\S]*permissions:[\s\S]*id-token:\s*write/);
+  assert.match(wf,/smoke:[\s\S]*needs:\s*deploy/);
+  assert.match(wf,/smoke:[\s\S]*permissions:[\s\S]*contents:\s*read/);
+  assert.match(wf,/PREVIEW_URL:\s*\$\{\{\s*needs\.deploy\.outputs\.preview_url\s*\}\}/);
   assert.match(wf,/contents:\s*read/);
   assert.match(wf,/actions\/checkout@v7/);
   assert.match(wf,/google-github-actions\/auth@v3/);
@@ -24,6 +27,7 @@ test('preview workflow uses OIDC, gates deployment, and never deploys production
   assert.match(wf,/npm run test:node/);
   assert.match(wf,/pytest -q/);
   assert.match(wf,/hosting:channel:deploy/);
+  assert.match(wf,/predeploy hooks are not permitted/);
   assert.match(wf,/BASE_URL:.*PREVIEW_URL/);
   assert.doesNotMatch(wf,/FIREBASE_TOKEN|service.?account.*json/i);
   assert.doesNotMatch(wf,/firebase-tools@latest\s+deploy(?:\s|$)/);
