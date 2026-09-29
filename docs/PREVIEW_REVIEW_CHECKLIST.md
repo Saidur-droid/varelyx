@@ -63,3 +63,14 @@ Reviewed by product owner: [ ]
 Approved for production: [ ]
 
 Production must remain unchanged until the product owner explicitly approves the preview link.
+
+
+## PC-independent execution path
+
+Preferred path is now **GitHub Actions -> Google OIDC/WIF -> Firebase Hosting preview -> Playwright**.
+
+- GitHub Codespaces is the interactive cloud fallback.
+- Remote Desktop is optional only.
+- Follow `docs/CLOUD_CI_SETUP.md` for one-time account setup.
+- Do not use a service-account JSON key or `FIREBASE_TOKEN`.
+- Production remains manually gated.
