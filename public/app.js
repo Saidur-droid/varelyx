@@ -14,6 +14,7 @@ const status = $('#persistenceStatus');
 const exporter = $('#exportBtn');
 const copyReceiptBtn = $('#copyReceiptBtn');
 const analytics = createAnalyticsAdapter(globalThis.posthog ?? null);
+const SANDBOX_STATUS = 'APPROVED_SANDBOX';
 analytics.capture('demo_session_started',{mode:'controlled_simulation'});
 
 function message(text, error = false) {
@@ -86,10 +87,16 @@ function render() {
   $('#proofFreshness').textContent = vm.proofFreshness === 'STALE' ? 'Stale — re-analysis required' : vm.proofFreshness === 'CURRENT' ? 'Current evidence' : 'Not run';
   $('#proofFreshness').className='proof-freshness '+(vm.proofFreshness==='STALE'?'stale':vm.proofFreshness==='CURRENT'?'current':'');
   $('#proof').innerHTML=state.proof?'<div class="proof-hero"><span>Proof result</span><h2 class="'+escape(state.proof.status)+'">'+escape(state.proof.status)+'</h2><small class="receipt-hash">SHA-256 receipt: '+escape(state.proof.receipt_hash)+'</small></div>'+state.proof.checks.map(c=>'<div class="check"><div class="check-rule"><b>'+escape(c.name)+'</b></div><div class="check-observed">'+escape(c.detail)+'</div><div class="status '+escape(c.status)+'">'+escape(c.status)+'</div></div>').join(''):'<div class="proof-hero"><span>Proof result</span><h3>Waiting for a candidate</h3><p class="hint">No plan proven for the current evidence.</p></div>';
-  $('#actions').innerHTML=state.actions.length?state.actions.map(a=>'<div class="action-card"><b>'+escape(a.type)+'</b><div>'+escape(a.status)+'</div><small>'+escape(JSON.stringify(a.payload))+'</small></div>').join(''):'<p class="hint">No verified saved actions. Sandbox only; no external order is sent.</p>';
+  $('#approvalNumbers').innerHTML='<div><span>Transfer</span><b>'+escape(balanced.transfer_cases)+'</b></div><div><span>Supplier B</span><b>'+escape(balanced.supplier_b_cases)+'</b></div><div><span>Emergency</span><b>'+escape(balanced.emergency_cases)+'</b></div><div><span>Cash</span><b>BDT '+escape(balanced.cash_required_bdt)+'</b></div><small>'+(state.proof?.status==='PASS'&&!vm.stale?'Current proof PASS — human authorization available.':'Awaiting a current PASS before authorization.')+'</small>';
+  $('#actions').innerHTML=state.actions.length?state.actions.map(a=>'<div class="action-card"><b>'+escape(a.type)+'</b><div>'+escape(a.status===SANDBOX_STATUS?SANDBOX_STATUS:a.status)+'</div><small>'+escape(JSON.stringify(a.payload))+'</small></div>').join(''):'<p class="hint">No verified saved actions. Sandbox only; no external order is sent.</p>';
   $('#shadow').innerHTML='<div class="shadow-bars"><div class="shadow-card"><span>Current response</span><b>'+escape(baseline)+'</b><small>expected stockout cases</small></div><div class="shadow-card"><span>Varelyx balanced</span><b>'+escape(balanced.expected_stockout_cases)+'</b><small>expected stockout cases</small></div></div><p class="hint">Same fixed demand scenario set. Route cap: '+escape(routeLimit(ex?.affected_routes??null))+' cases under the disclosed controlled policy.</p>';
   const audit=[...state.audit].sort((a,b)=>String(a.at).localeCompare(String(b.at)));
-  $('#auditTimeline').innerHTML=audit.length?audit.map(a=>'<div class="audit-event"><div></div><div><b>'+escape(auditLabel(a.event))+'</b>'+(a.receipt_hash?'<div class="hint">Receipt '+escape(a.receipt_hash.slice(0,16))+'…</div>':'')+'</div><small>'+escape(a.at||'')+'</small></div>').join(''):'<p class="hint">Audit events will appear after live evidence analysis.</p>';
+  const runtimeAudit=[];
+  if(connected) runtimeAudit.push({event:'FIREBASE_SESSION_VERIFIED',at:'current session'});
+  if(state.proof) runtimeAudit.push({event:'PROOF_GENERATED_'+state.proof.status,at:state.proof.created_at||'current session',receipt_hash:state.proof.receipt_hash});
+  if(lastSave?.verified) runtimeAudit.push({event:'FIREBASE_SAVE_VERIFIED',at:lastSave.verifiedAt||'current session'});
+  const visibleAudit=[...audit,...runtimeAudit];
+  $('#auditTimeline').innerHTML=visibleAudit.length?visibleAudit.map(a=>'<div class="audit-event"><div></div><div><b>'+escape(auditLabel(a.event))+'</b>'+(a.receipt_hash?'<div class="hint">Receipt '+escape(a.receipt_hash.slice(0,16))+'…</div>':'')+'</div><small>'+escape(a.at||'')+'</small></div>').join(''):'<p class="hint">Audit events will appear after live evidence analysis.</p>';
 
   document.querySelectorAll('button').forEach(b=>{b.disabled=busy||!connected||session?.blocked;});
   exporter.disabled=busy; copyReceiptBtn.disabled=busy||!state.proof?.receipt_hash; $('#approveBtn').disabled ||= vm.holds.length>0||state.proof?.status!=='PASS'; $('#disruptionInput').disabled=busy; $('#capacityInput').disabled=busy;
