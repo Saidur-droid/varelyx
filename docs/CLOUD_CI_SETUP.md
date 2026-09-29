@@ -123,6 +123,17 @@ done
 BASE_URL=http://127.0.0.1:4173 npm run test:e2e
 ```
 
+## E0. Why the controller must be on main
+
+GitHub only accepts `workflow_dispatch` for workflows that exist on the default branch. Therefore the trusted preview controller must be merged to `main` **before** it can deploy the unmerged product branch. The controller itself does not deploy production; it checks out only the approved `fix/firebase-verification-20260929` target and deploys that target to a Hosting preview channel.
+
+The WIF provider is intentionally constrained to:
+- repository `Saidur-droid/varelyx`;
+- GitHub ref `refs/heads/main`;
+- GitHub environment `preview`.
+
+This prevents the feature branch itself from directly obtaining Google deployment credentials.
+
 ## E. Trigger automatic Firebase preview
 
 After WIF variables exist and GitHub-hosted runners work:
