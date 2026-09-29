@@ -3,90 +3,206 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Varelyx — Retail Continuity Intelligence</title>
-  <meta name="description" content="Evidence-driven retail continuity intelligence built with Firebase AI Logic and Gemini.">
+  <meta name="theme-color" content="#080b10">
+  <title>Varelyx — Retail Continuity Decision Intelligence</title>
+  <meta name="description" content="Uncertainty-aware retail continuity decision intelligence built with Firebase and Gemini.">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<header>
-  <div><span class="logo">VARELYX</span><span class="tag">Retail continuity intelligence</span></div>
-  <div id="cloudState" class="pill">Connecting to Firebase…</div>
-</header>
-<main>
-  <section class="hero panel">
-    <div>
-      <div class="eyebrow">CONTROLLED BANGLADESH CONTINUITY TWIN</div>
-      <h1>Know what matters. Ask what’s missing. <span>Prove what works.</span> Then act.</h1>
-      <p>Gemini structures messy disruption evidence. A deterministic optimizer computes feasible responses. The Proof Gate can block unsafe plans before approval.</p>
-      <div class="techline">Firebase Hosting · Firebase AI Logic · Gemini Developer API · Realtime Database</div>
+<div id="appShell" class="app-shell">
+  <aside class="sidebar" aria-label="Workspace navigation">
+    <a class="brand" href="#commandCenter" aria-label="Varelyx home">
+      <span class="brand-mark">V</span>
+      <span><b>VARELYX</b><small>Decision Intelligence</small></span>
+    </a>
+    <nav>
+      <a href="#commandCenter" class="nav-link active"><span>01</span>Command Center</a>
+      <a href="#evidenceWorkspace" class="nav-link"><span>02</span>Evidence</a>
+      <a href="#scenarioWorkspace" class="nav-link"><span>03</span>Scenarios</a>
+      <a href="#proofWorkspace" class="nav-link"><span>04</span>Proof Gate</a>
+      <a href="#actionWorkspace" class="nav-link"><span>05</span>Actions</a>
+      <a href="#auditWorkspace" class="nav-link"><span>06</span>Audit</a>
+    </nav>
+    <div class="sidebar-foot">
+      <span class="eyebrow">AI BUILDER CUP 2026</span>
+      <p>Retail & Commerce</p>
+      <small>Controlled simulation · no external orders</small>
     </div>
-    <div class="hero-actions">
-      <button id="resetBtn" class="secondary">Reset demo</button>
-      <button id="analyzeBtn">Analyze disruption with Gemini</button>
-    </div>
-  </section>
+  </aside>
 
-  <section id="setupWarning" class="panel warning hidden">
-    <b>Firebase setup required</b>
-    <p>Replace placeholders in <code>public/firebase-config.js</code>, enable Anonymous Authentication, Realtime Database, Firebase AI Logic (Gemini Developer API), and App Check. No billing account is required for this Spark/free-tier path.</p>
-  </section>
-
-  <section class="metrics" id="metrics"></section>
-
-  <section class="grid two">
-    <div class="panel">
-      <div class="section-title"><span>01</span> Evidence Board</div>
-      <div id="decisionBanner" class="decision-banner"></div>
-      <div class="evidence-columns">
-        <div><h3>Known</h3><div id="known"></div></div>
-        <div><h3>Estimated</h3><div id="estimated"></div></div>
-        <div><h3>Unknown</h3><div id="unknown"></div></div>
+  <div class="workspace">
+    <header class="topbar">
+      <div>
+        <span class="topbar-kicker">LIVE DECISION WORKSPACE</span>
+        <strong>Bangladesh continuity scenario</strong>
       </div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title"><span>02</span> Evidence Scout</div>
-      <label for="disruptionInput">Supplier / operations evidence</label>
-      <textarea id="disruptionInput" rows="5">Eid er age Supplier B delivery 48 hours late. 2 routes affected. Thursday capacity ekhono confirm hoy nai.</textarea>
-      <div id="geminiResult" class="resultBox"></div>
-      <div id="questionBox"></div>
-      <div class="answer-row">
-        <input id="capacityInput" type="number" min="0" value="120" aria-label="Supplier B confirmed capacity">
-        <button id="answerBtn">Confirm supplier answer</button>
+      <div id="systemStatusBar" class="system-status" aria-label="System status">
+        <span id="cloudState" class="status-chip neutral">Firebase connecting</span>
+        <span id="geminiState" class="status-chip neutral">Gemini not run</span>
+        <span id="reviewState" class="status-chip neutral">Review required</span>
+        <span id="proofState" class="status-chip neutral">Proof not run</span>
+        <span id="saveState" class="status-chip neutral">Save not verified</span>
       </div>
-      <p class="hint">Controlled demo answer: Supplier B confirms a maximum of 120 cases by Thursday.</p>
-    </div>
-  </section>
+    </header>
 
-  <section class="panel">
-    <div class="section-title"><span>03</span> Scenario Room</div>
-    <div id="strategies" class="strategy-grid"></div>
-  </section>
+    <main>
+      <section id="commandCenter" class="hero panel hero-premium">
+        <div class="hero-copy">
+          <div class="eyebrow">RETAIL CONTINUITY DECISION WORKSPACE</div>
+          <h1>Turn disruption into a decision <span>you can prove.</span></h1>
+          <p>Gemini structures messy supplier evidence. Varelyx exposes uncertainty, asks for the missing fact that can change the decision, computes feasible responses, and blocks plans that violate encoded constraints.</p>
+          <div class="hero-actions">
+            <button id="analyzeBtn" class="primary xl">Analyze disruption</button>
+            <a class="button secondary xl" href="#proofWorkspace">View proof flow</a>
+            <button id="resetBtn" class="button ghost">Reset demo</button>
+          </div>
+          <div class="trust-line">
+            <span>Firebase Hosting</span><i></i><span>Firebase AI Logic</span><i></i><span>Gemini</span><i></i><span>Realtime Database</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Decision flow">
+          <div class="orb">
+            <span>KNOW</span>
+            <b>ASK</b>
+            <strong>PROVE</strong>
+            <em>ACT</em>
+          </div>
+          <p>AI interprets. Deterministic logic decides quantities. Proof Gate verifies constraints. Human approves.</p>
+        </div>
+      </section>
 
-  <section class="grid two">
-    <div class="panel">
-      <div class="section-title"><span>04</span> Proof Gate</div>
-      <div class="proof-actions">
-        <button data-proof="balanced">Prove balanced plan</button>
-        <button data-proof="unverified-aggressive" class="danger">Try unsafe proposal</button>
-      </div>
-      <div id="proof"></div>
-    </div>
+      <section id="setupWarning" class="panel warning hidden">
+        <b>Firebase setup required</b>
+        <p>Check Anonymous Authentication, Realtime Database, Firebase AI Logic and App Check configuration for this domain.</p>
+      </section>
 
-    <div class="panel">
-      <div class="section-title"><span>05</span> Action Center</div>
-      <button id="approveBtn">Approve & persist actions</button>
-      <div id="actions"></div>
-    </div>
-  </section>
+      <section id="persistenceStatus" class="status-banner panel" role="status" aria-live="polite">
+        Connecting to verified Firebase persistence…
+      </section>
 
-  <section class="panel">
-    <div class="section-title"><span>06</span> Shadow Mode</div>
-    <div id="shadow"></div>
-    <p class="hint">All impact values are controlled-simulation outputs, not observed retailer outcomes.</p>
-  </section>
-</main>
-<footer>Varelyx · Built in Bangladesh · Designed for volatile commerce everywhere.</footer>
+      <section class="stage-rail" aria-label="Decision stages">
+        <div class="stage active" data-stage="signal"><span>1</span><div><b>Signal</b><small>Disruption received</small></div></div>
+        <div class="stage" data-stage="evidence"><span>2</span><div><b>Evidence</b><small>Known vs unknown</small></div></div>
+        <div class="stage" data-stage="decision"><span>3</span><div><b>Decision</b><small>Trade-offs computed</small></div></div>
+        <div class="stage" data-stage="proof"><span>4</span><div><b>Proof</b><small>Constraints verified</small></div></div>
+        <div class="stage" data-stage="action"><span>5</span><div><b>Action</b><small>Human approval</small></div></div>
+      </section>
+
+      <section class="metrics" id="metrics" aria-label="Decision metrics"></section>
+
+      <section id="evidenceWorkspace" class="workspace-section">
+        <div class="section-head">
+          <div><span class="eyebrow">02 · EVIDENCE</span><h2>What do we actually know?</h2></div>
+          <p>Every material fact stays visible as confirmed, estimated, unknown or stale.</p>
+        </div>
+        <div class="grid evidence-layout">
+          <div class="panel evidence-panel">
+            <div id="decisionBanner" class="decision-banner"></div>
+            <div class="evidence-columns">
+              <div><h3><span class="dot confirmed"></span>Confirmed</h3><div id="known"></div></div>
+              <div><h3><span class="dot estimated"></span>Estimated</h3><div id="estimated"></div></div>
+              <div><h3><span class="dot unknown"></span>Unknown</h3><div id="unknown"></div></div>
+            </div>
+          </div>
+
+          <div class="panel scout-panel">
+            <div class="panel-label">EVIDENCE SCOUT</div>
+            <h3>The missing fact most likely to change the decision</h3>
+            <div id="questionBox" class="question-card"></div>
+            <label for="disruptionInput">Supplier / operations evidence</label>
+            <textarea id="disruptionInput" rows="5">Eid er age Supplier B delivery 48 hours late. 2 routes affected. Thursday capacity ekhono confirm hoy nai.</textarea>
+            <div id="geminiResult" class="resultBox" aria-live="polite"></div>
+            <div class="answer-row">
+              <input id="capacityInput" type="number" min="0" value="120" aria-label="Supplier B confirmed capacity">
+              <button id="answerBtn">Review & confirm</button>
+            </div>
+            <p class="hint">Controlled demo answer: Supplier B confirms a maximum of 120 cases by Thursday.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="scenarioWorkspace" class="workspace-section">
+        <div class="section-head">
+          <div><span class="eyebrow">03 · SCENARIOS</span><h2>Compare the trade-offs before committing.</h2></div>
+          <p>Deterministic planning owns quantities and hard constraints. Gemini does not create executable order amounts.</p>
+        </div>
+        <div class="panel">
+          <div id="strategies" class="strategy-grid"></div>
+          <div class="simulation-note"><b>Controlled simulation</b><span>Demand, cost and route assumptions are demo inputs—not observed retailer outcomes.</span></div>
+        </div>
+      </section>
+
+      <section id="proofWorkspace" class="workspace-section proof-section">
+        <div class="section-head">
+          <div><span class="eyebrow">04 · PROOF GATE</span><h2>Make unsafe decisions impossible to miss.</h2></div>
+          <p>A separate verifier checks the selected plan against encoded operational constraints.</p>
+        </div>
+        <div class="grid proof-layout">
+          <div class="panel proof-control">
+            <span class="panel-label">DECISION VERIFICATION</span>
+            <h3>Run the verified candidate—or deliberately test an unsafe proposal.</h3>
+            <div class="proof-actions">
+              <button data-proof="balanced">Prove balanced candidate</button>
+              <button data-proof="unverified-aggressive" class="danger">Test unsafe proposal</button>
+            </div>
+            <div class="receipt-disclaimer">Receipt binds the controlled evidence, plan and checks. It is not a blockchain attestation or server-authoritative procurement approval.</div>
+          </div>
+          <div class="panel proof-result">
+            <div id="proof"><p class="hint">No plan proven for the current evidence.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="actionWorkspace" class="workspace-section">
+        <div class="section-head">
+          <div><span class="eyebrow">05 · HUMAN APPROVAL</span><h2>AI stops before execution.</h2></div>
+          <p>Varelyx records sandbox action objects only after proof and explicit human approval.</p>
+        </div>
+        <div class="grid action-layout">
+          <div class="panel approval-panel">
+            <div class="approval-icon">H</div>
+            <div>
+              <span class="panel-label">HUMAN APPROVAL REQUIRED</span>
+              <h3>Approve only the currently proven decision.</h3>
+              <p>No supplier, ERP, WMS or external purchasing system is contacted by this prototype.</p>
+            </div>
+            <button id="approveBtn" class="primary xl">Approve sandbox actions</button>
+          </div>
+          <div class="panel">
+            <div id="actions"><p class="hint">No verified saved actions yet.</p></div>
+            <button id="exportBtn" class="button secondary">Export QA evidence JSON</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-section">
+        <div class="section-head">
+          <div><span class="eyebrow">SHADOW MODE</span><h2>Same scenario. Different response.</h2></div>
+          <p>Impact comparison uses the same fixed scenario set for both responses.</p>
+        </div>
+        <div class="panel">
+          <div id="shadow"></div>
+          <p class="simulation-note"><b>Controlled simulation.</b> Not observed retailer outcomes.</p>
+        </div>
+      </section>
+
+      <section id="auditWorkspace" class="workspace-section">
+        <div class="section-head">
+          <div><span class="eyebrow">06 · AUDIT</span><h2>Every decision leaves a trail.</h2></div>
+          <p>Evidence, review, proof, approval and verified persistence remain inspectable.</p>
+        </div>
+        <div class="panel">
+          <div id="auditTimeline" class="audit-timeline"><p class="hint">Audit events will appear here.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div><b>VARELYX</b> · Built in Bangladesh for volatile commerce everywhere.</div>
+      <div>Competition prototype · controlled simulation · human-in-the-loop</div>
+    </footer>
+  </div>
+</div>
 <script type="module" src="/app.js"></script>
 </body>
 </html>
