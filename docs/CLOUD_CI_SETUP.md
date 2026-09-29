@@ -16,6 +16,8 @@ set -euo pipefail
 
 PROJECT_ID="varelyx-ai-builder-cup"
 GITHUB_REPO="Saidur-droid/varelyx"
+GITHUB_REPOSITORY_ID="1363183610"
+GITHUB_OWNER_ID="306319519"
 WORKLOAD_IDENTITY_POOL="github-actions"
 WORKLOAD_IDENTITY_PROVIDER="varelyx"
 SA_NAME="varelyx-github-deploy"
@@ -38,7 +40,7 @@ POOL_NAME="$(gcloud iam workload-identity-pools describe "$WORKLOAD_IDENTITY_POO
 
 PROVIDER_NAME="$(gcloud iam workload-identity-pools providers describe "$WORKLOAD_IDENTITY_PROVIDER"   --project="$PROJECT_ID" --location=global   --workload-identity-pool="$WORKLOAD_IDENTITY_POOL" --format='value(name)')"
 
-gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL"   --project="$PROJECT_ID"   --role="roles/iam.workloadIdentityUser"   --member="principalSet://iam.googleapis.com/$POOL_NAME/attribute.repository/$GITHUB_REPO"
+gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL"   --project="$PROJECT_ID"   --role="roles/iam.workloadIdentityUser"   --member="principalSet://iam.googleapis.com/$POOL_NAME/attribute.repository_id/$GITHUB_REPOSITORY_ID"
 
 gcloud projects add-iam-policy-binding "$PROJECT_ID"   --member="serviceAccount:$SA_EMAIL"   --role="roles/firebasehosting.admin"
 
@@ -127,10 +129,7 @@ BASE_URL=http://127.0.0.1:4173 npm run test:e2e
 
 GitHub only accepts `workflow_dispatch` for workflows that exist on the default branch. Therefore the trusted preview controller must be merged to `main` **before** it can deploy the unmerged product branch. The controller itself does not deploy production; it checks out only the approved `fix/firebase-verification-20260929` target and deploys that target to a Hosting preview channel.
 
-The WIF provider is intentionally constrained to:
-- repository `Saidur-droid/varelyx`;
-- GitHub ref `refs/heads/main`;
-- GitHub environment `preview`.
+The WIF provider is intentionally constrained to immutable repository/owner IDs, GitHub ref `refs/heads/main`, environment `preview`, event `workflow_dispatch`, and the exact trusted workflow path `.github/workflows/firebase-preview.yml@refs/heads/main`.
 
 This prevents the feature branch itself from directly obtaining Google deployment credentials.
 
