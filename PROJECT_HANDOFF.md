@@ -8,7 +8,7 @@ Production URL recorded in the prior deployment handoff: https://varelyx-ai-buil
 
 ## Read this first
 
-The reliability implementation is on `fix/firebase-verification-20260929`. It is not certified as deployed or production-ready. Read `docs/FIREBASE_FIX_REPORT_2026-09-29.md` for the code changes, actual tests, security limitations and precise owner-side connection/live QA steps.
+The reliability implementation and premium decision-workspace redesign are on `fix/firebase-verification-20260929`. They are not certified as deployed or production-ready. Read `docs/FIREBASE_FIX_REPORT_2026-09-29.md`, `docs/superpowers/specs/2026-09-29-premium-decision-workspace-design.md`, `docs/superpowers/plans/2026-09-29-premium-decision-workspace.md`, and `docs/PREVIEW_REVIEW_CHECKLIST.md`.
 
 Do not treat the existing `NEXT_STEPS.md`, `DEPLOYMENT_STATUS.md` or prepared submission copy as evidence that the new branch has passed live QA.
 
@@ -39,13 +39,28 @@ Primary path remains Firebase Hosting + Firebase AI Logic/Gemini + Anonymous Aut
 - Receipt-linked sandbox action records, duplicate protection and evidence export.
 - Separate Node web tests added to CI; Python asset checks updated for modular files.
 
+## Premium decision-workspace redesign implemented on the branch
+
+- Premium Command Center and five-stage Signal -> Evidence -> Decision -> Proof -> Action narrative.
+- Persistent Firebase / Gemini / Evidence / Proof / Save status bar.
+- Evidence Board with Confirmed / Estimated / Unknown presentation and source-grounded evidence display.
+- Evidence Scout promoted as the decision-critical missing-fact workflow.
+- Scenario hierarchy with a non-superlative **Balanced demo candidate** plus direct trade-off comparison.
+- Signature Proof Gate presentation with PASS / HOLD / BLOCK, constraint details and copyable SHA-256 receipt.
+- Explicit human approval boundary and sandbox-only action language.
+- Shadow Mode and chronological audit timeline.
+- Responsive 1440 / 1280 / 390 design contracts, visible keyboard focus, reduced-motion support and text-labelled status states.
+- Privacy-safe optional analytics adapter; analytics failure cannot block the judge flow and raw supplier evidence is stripped.
+- Matching Figma review file: https://www.figma.com/design/L96hoZxuZmi4I45jeP6Iqy
+- Production has NOT been overwritten. Firebase preview deployment is the next release gate.
+
 ## Verification actually obtained
 
 Local Node test result observed during implementation: 31 passed / 31 tests. This covers deterministic logic and mocked transport, including a 140-plan boundary matrix inside one test.
 
 NOT verified: real Firebase writes, real Gemini inference, App Check enforcement, actual browser flow, mobile visuals, production deployment or final submission. Browser navigation was blocked by the execution environment. No live screenshot or video was fabricated.
 
-The prior GitHub main CI failed before any reported job steps; logs were unavailable and the annotations endpoint was not accessible through the connector. Root cause remains unconfirmed. New workflow code does not imply a successful hosted CI run.
+The latest redesign PR run (GitHub Actions run 36580552758) also completed as failure before reported job steps: both `web` and `test` jobs returned no runner name and no steps. This still does not establish a test assertion failure. Root cause remains unconfirmed. Full exact-branch verification must run on the authorized machine before preview deploy.
 
 ## Immediate P0 queue
 
@@ -61,7 +76,7 @@ The prior GitHub main CI failed before any reported job steps; logs were unavail
 
 Official sources: https://aibuildercup.com/ and https://aibuildercup.com/themes.html .
 
-Recently indexed official information lists teams of 2-4, team formation through October 11, 2026, and prototype submission through October 18, 2026. Direct retrieval also exposed an older homepage version listing 1-4; confirm the latest rule in the authenticated portal. Do not confuse the original internal October 3 target with the published submission deadline.
+The current public homepage lists teams of 2-4, team formation/registration through October 11, 2026, and prototype submission through October 18, 2026. The linked official Terms & Conditions also require teams of 2-4 but state that roster additions/replacements close October 4 and that those Terms prevail over inconsistent promotional material. Use **October 4 as the conservative roster-change cutoff** unless the organizer gives written clarification. Do not confuse the original internal October 3 target with the published prototype submission deadline.
 
 Participants must be 21+, based in JAPAC and eligible working professionals. Students are not eligible. Use Google AI/eligible agentic tooling and deploy a working prototype on Google Cloud/Cloud Run/Firebase. Submission materials are English: proposal PDF, deployed prototype and public three-minute demo. Judging weights are technical/GenAI 40%, problem alignment/impact 25%, innovation 25%, UX/design 10%.
 
