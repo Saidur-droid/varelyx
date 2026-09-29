@@ -86,3 +86,27 @@ See:
 - `docs/FIREBASE_NO_CARD_DEPLOY.md`
 - `docs/SUBMISSION_READY.md`
 - `DEPLOYMENT_STATUS.md`
+
+
+## Cloud development
+
+Varelyx can be developed without a local PC by opening this repository in GitHub Codespaces. The devcontainer pins Node 22 and Python 3.12, installs Python and Node dependencies, and forwards port 4173 for local preview.
+
+Core verification commands:
+
+```bash
+npm run check:js
+npm run test:node
+PYTHONPATH=. pytest -q
+npx playwright install --with-deps chromium
+python -m http.server 4173 -d public
+```
+
+In a second terminal:
+
+```bash
+BASE_URL=http://127.0.0.1:4173 npm run test:e2e
+npx --yes firebase-tools@latest projects:list
+```
+
+Do not store Firebase CLI login tokens, service-account JSON, or personal Google credentials in the repository. GitHub Actions preview deployment is designed to use short-lived Google Workload Identity Federation credentials.
