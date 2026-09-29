@@ -35,3 +35,21 @@ test('receipt and long proof content are locally contained',()=>{
   assert.match(html,/server-authoritative procurement approval/);
   assert.match(css,/overflow-wrap:anywhere/);
 });
+
+test('act workspace separates AI analysis from human authorization',()=>{
+  for(const id of ['approvalSummary','actionLedger','shadowMode','auditSequence']) assert.match(html,new RegExp('id=["\\\']'+id+'["\\\']'));
+  assert.match(html,/AI analysis/i); assert.match(html,/Human authorization/i);
+});
+test('sandbox action state and no-dispatch boundary stay explicit',()=>{
+  assert.match(app,/APPROVED_SANDBOX/);
+  assert.match(html,/No supplier, ERP, WMS or external purchasing system is contacted/);
+});
+test('shadow mode carries the exact simulation disclaimer',()=>assert.match(html,/Controlled simulation\.<\/b> Not observed retailer outcomes\./));
+test('audit sequence names evidence proof approval and persistence',()=>{
+  for(const label of ['Evidence reviewed','Proof generated','Human approval','Firebase save verified']) assert.match(html,new RegExp(label,'i'));
+});
+test('small-screen layout contains page overflow and keeps local comparison scroll',()=>{
+  assert.match(css,/\.strategy-comparison\{[^}]*overflow:auto/);
+  assert.match(css,/overflow-x:hidden/);
+  assert.match(css,/\.action-card[^}]*overflow-wrap:anywhere/);
+});
