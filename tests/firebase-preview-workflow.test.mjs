@@ -27,5 +27,10 @@ test('preview workflow uses OIDC, gates deployment, and never deploys production
   assert.match(wf,/BASE_URL:.*PREVIEW_URL/);
   assert.doesNotMatch(wf,/FIREBASE_TOKEN|service.?account.*json/i);
   assert.doesNotMatch(wf,/firebase-tools@latest\s+deploy(?:\s|$)/);
+  assert.match(wf,/target_ref:/);
+  assert.match(wf,/ALLOWED_TARGET_REF/);
+  assert.match(wf,/ref:\s*\$\{\{\s*inputs\.target_ref\s*\}\}/);
+  assert.match(wf,/--ref main/);
   assert.doesNotMatch(wf,/pull_request:/);
+  assert.doesNotMatch(wf,/scripts\/extract-firebase-preview-url\.mjs/);
 });
