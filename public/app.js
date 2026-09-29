@@ -62,7 +62,7 @@ function render() {
     : 'Use live Gemini to structure the supplier signal, then Varelyx will expose uncertainty before any operational decision is allowed.';
   $('#decisionStateValue').textContent = humanDecisionState(vm.decisionState);
   $('#decisionStateDetail').textContent = vm.holds[0] ?? 'Reviewed evidence is ready for deterministic decisioning.';
-  $('#unresolvedEvidenceValue').textContent = String(vm.unresolvedEvidenceCount);
+  $('#unresolvedEvidenceValue').textContent = vm.unresolvedEvidenceCount === null ? 'Not assessed' : String(vm.unresolvedEvidenceCount);
   $('#nextActionValue').textContent = vm.nextAction.label;
   $('#nextActionDetail').textContent = vm.nextAction.disabled ? 'Firebase verification is required before this action.' : 'This is the safest next step for the current decision state.';
 
