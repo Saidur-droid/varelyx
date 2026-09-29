@@ -62,10 +62,12 @@ test('fresh state reports operational incident status', () => {
   assert.equal(vm.proofFreshness,'NOT_RUN');
 });
 
-test('analyzed but unreviewed state reports unresolved evidence', () => {
+test('unresolved evidence count represents missing material facts only', () => {
+  assert.equal(buildViewModel(initialState(),'',true,null).unresolvedEvidenceCount,null);
   const vm=buildViewModel(analyzed(),source,true,null);
-  assert.ok(vm.unresolvedEvidenceCount > 0);
+  assert.equal(vm.unresolvedEvidenceCount,1);
   assert.equal(vm.decisionState,'WAITING_FOR_EVIDENCE_REVIEW');
+  assert.equal(buildViewModel(ready(),source,true,null).unresolvedEvidenceCount,0);
 });
 
 test('reviewed state is ready for proof', () => {
