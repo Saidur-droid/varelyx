@@ -1,0 +1,94 @@
+name: Firebase Preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel_id:
+        description: Firebase Hosting preview channel
+        required: false
+        default: premium-workspace
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+  GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+  GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+jobs:
+  preview:
+    name: verify-deploy-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: preview
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Validate required repository variables
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${FIREBASE_PROJECT_ID:?Set Actions variable FIREBASE_PROJECT_ID}"
+          : "${GCP_WORKLOAD_IDENTITY_PROVIDER:?Set Actions variable GCP_WORKLOAD_IDENTITY_PROVIDER}"
+          : "${GCP_SERVICE_ACCOUNT:?Set Actions variable GCP_SERVICE_ACCOUNT}"
+
+      - name: Install dependencies
+        run: |
+          npm install --no-audit --no-fund
+          python -m pip install -r requirements.txt
+
+      - name: Verify source and unit contracts
+        run: |
+          npm run check:js
+          npm run test:node
+          python -m compileall -q app tests
+          PYTHONPATH=. pytest -q
+
+      - name: Authenticate to Google Cloud with GitHub OIDC
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
+          create_credentials_file: true
+          export_environment_variables: true
+
+      - name: Deploy Firebase Hosting preview
+        id: deploy
+        shell: bash
+        env:
+          CHANNEL_ID: ${{ inputs.channel_id }}
+        run: |
+          set -euo pipefail
+          npx --yes firebase-tools@latest hosting:channel:deploy "$CHANNEL_ID" --project "$FIREBASE_PROJECT_ID" --json | tee firebase-preview-output.json
+          PREVIEW_URL="$(node scripts/extract-firebase-preview-url.mjs firebase-preview-output.json)"
+          echo "PREVIEW_URL=$PREVIEW_URL" >> "$GITHUB_ENV"
+          echo "### Firebase preview" >> "$GITHUB_STEP_SUMMARY"
+          echo "$PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Install Chromium for preview smoke
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke-test deployed preview
+        env:
+          BASE_URL: ${{ env.PREVIEW_URL }}
+        run: npm run test:e2e
+
+      - name: Record QA status
+        if: always()
+        shell: bash
+        run: |
+          echo "### Preview QA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Workflow status: ${{ job.status }}" >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "${PREVIEW_URL:-}" ]; then echo "Preview URL: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"; fi
