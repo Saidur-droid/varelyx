@@ -1,0 +1,175 @@
+name: Firebase Preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_ref:
+        description: Git ref to verify and deploy
+        required: true
+        default: fix/firebase-verification-20260929
+        type: string
+      channel_id:
+        description: Firebase Hosting preview channel
+        required: false
+        default: premium-workspace
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+  GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+  GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+  ALLOWED_TARGET_REF: fix/firebase-verification-20260929
+
+jobs:
+  deploy:
+    name: verify-and-deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    environment: preview
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      preview_url: ${{ steps.deploy.outputs.preview_url }}
+    steps:
+      - name: Validate dispatch and repository variables
+        shell: bash
+        env:
+          TARGET_REF: ${{ inputs.target_ref }}
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "Run this controller from --ref main only." >&2
+            exit 1
+          fi
+          if [ "$TARGET_REF" != "$ALLOWED_TARGET_REF" ]; then
+            echo "Ref '$TARGET_REF' is not approved by this preview controller." >&2
+            exit 1
+          fi
+          : "${FIREBASE_PROJECT_ID:?Set Actions variable FIREBASE_PROJECT_ID}"
+          : "${GCP_WORKLOAD_IDENTITY_PROVIDER:?Set Actions variable GCP_WORKLOAD_IDENTITY_PROVIDER}"
+          : "${GCP_SERVICE_ACCOUNT:?Set Actions variable GCP_SERVICE_ACCOUNT}"
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.target_ref }}
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund
+          python -m pip install -r requirements.txt
+
+      - name: Verify source and unit contracts before cloud authentication
+        run: |
+          npm run check:js
+          npm run test:node
+          python -m compileall -q app tests
+          PYTHONPATH=. pytest -q
+
+      - name: Reject Firebase predeploy hooks before credentials exist
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const config = JSON.parse(await readFile('firebase.json','utf8'));
+          function containsPredeploy(value) {
+            if (!value || typeof value !== 'object') return false;
+            if (Object.prototype.hasOwnProperty.call(value,'predeploy')) return true;
+            return Object.values(value).some(containsPredeploy);
+          }
+          if (containsPredeploy(config)) {
+            console.error('firebase.json predeploy hooks are not permitted in the trusted preview controller');
+            process.exit(1);
+          }
+          NODE
+
+      - name: Authenticate to Google Cloud with GitHub OIDC
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ env.FIREBASE_PROJECT_ID }}
+          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
+          create_credentials_file: true
+          export_environment_variables: true
+
+      - name: Deploy Firebase Hosting preview
+        id: deploy
+        shell: bash
+        env:
+          CHANNEL_ID: ${{ inputs.channel_id }}
+        run: |
+          set -euo pipefail
+          npx --yes firebase-tools@latest hosting:channel:deploy "$CHANNEL_ID"             --project "$FIREBASE_PROJECT_ID" --json | tee firebase-preview-output.json
+
+          PREVIEW_URL="$(node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const raw = await readFile('firebase-preview-output.json','utf8');
+          const urls = raw.match(/https:\/\/[A-Za-z0-9.-]+(?:\.web\.app|\.firebaseapp\.com)[^"\\s]*/g) ?? [];
+          const preview = urls.find(url => new URL(url).hostname.includes('--')) ?? urls[0];
+          if (!preview) {
+            console.error('Firebase preview URL not found in deploy output');
+            process.exit(1);
+          }
+          process.stdout.write(preview.replace(/[),.;]+$/,''));
+          NODE
+          )"
+
+          echo "preview_url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
+          echo "### Firebase preview" >> "$GITHUB_STEP_SUMMARY"
+          echo "Target ref: ${{ inputs.target_ref }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Preview URL: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
+
+  smoke:
+    name: deployed-browser-smoke
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    env:
+      PREVIEW_URL: ${{ needs.deploy.outputs.preview_url }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.target_ref }}
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install browser test dependencies
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Smoke-test deployed preview
+        env:
+          BASE_URL: ${{ env.PREVIEW_URL }}
+        run: npm run test:e2e
+
+      - name: Record QA status
+        if: always()
+        shell: bash
+        run: |
+          echo "### Preview QA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Workflow status: ${{ job.status }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Preview URL: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
+
+# Bootstrap note:
+# GitHub requires workflow_dispatch workflows to exist on the default branch.
+# Run with: gh workflow run "Firebase Preview" --repo Saidur-droid/varelyx --ref main \
+#   -f target_ref=fix/firebase-verification-20260929 -f channel_id=premium-workspace
