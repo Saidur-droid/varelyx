@@ -388,3 +388,12 @@ Expected:
 - [ ] **Step 7: Keep production gated**
 
 Do not add or trigger production deploy until the user reviews the actual preview URL and explicitly approves production release.
+
+
+## Execution rulings
+
+- **Task 1 ruling — package lock:** the current execution sandbox could not reach the npm registry reliably enough to generate a trustworthy `package-lock.json`. The direct Playwright dependency is pinned to `1.63.0`, and CI/Codespaces use `npm install` rather than pretending a lockfile was verified. Cost if wrong: transitive npm resolution can drift until a lockfile is generated in Codespaces.
+- **Task 1 root-cause fix:** `tests/ui-contract.test.mjs` referenced `app` without reading `public/app.js`. This would have failed once a runner actually started; the test now loads the app source explicitly.
+- **Task 3 ruling — trusted default-branch controller:** GitHub requires a `workflow_dispatch` workflow to exist on the default branch. A separate infrastructure-only PR installs the preview controller on `main`, while the controller checks out the unmerged product branch through a hard allowlisted `target_ref`. Cost if wrong: the manual preview workflow would not be dispatchable before product merge.
+- **Task 3 security ruling — credential isolation:** cloud authentication/deploy and Playwright smoke are separate jobs. Only the deploy job has `id-token: write`; browser tests receive only the preview URL. Cost if wrong: target-branch test code could otherwise run while Google credentials are present.
+- **External blocker ruling:** repeated hosted CI runs still fail before runner assignment with `steps: null`. Repo code cannot fix a runner/account entitlement gate; Codespaces is the PC-independent fallback while GitHub Actions policy/billing is corrected.
