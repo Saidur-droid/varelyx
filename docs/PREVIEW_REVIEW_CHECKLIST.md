@@ -26,7 +26,7 @@ Core narrative:
 
 ## Automated verification status
 
-- Local reconstructed verification mirror on 2026-09-29: **76/76 Node tests passed**, including the 31 reliability tests plus view-model, UI-contract and analytics tests.
+- Local reconstructed verification mirror on 2026-09-29: **77/77 Node tests passed**, including the 31 reliability tests plus view-model, UI-contract and analytics tests.
 - Local Python regression: **13/13 pytest tests passed**.
 - All `public/*.js` and `public/*.mjs` passed `node --check`.
 - DOM contract scan found no duplicate IDs and no missing IDs referenced by `app.js`.
