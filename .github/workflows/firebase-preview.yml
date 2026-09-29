@@ -16,7 +16,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 env:
   FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
@@ -25,11 +24,16 @@ env:
   ALLOWED_TARGET_REF: fix/firebase-verification-20260929
 
 jobs:
-  preview:
-    name: verify-deploy-smoke
+  deploy:
+    name: verify-and-deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 22
     environment: preview
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      preview_url: ${{ steps.deploy.outputs.preview_url }}
     steps:
       - name: Validate dispatch and repository variables
         shell: bash
@@ -102,12 +106,13 @@ jobs:
           export_environment_variables: true
 
       - name: Deploy Firebase Hosting preview
+        id: deploy
         shell: bash
         env:
           CHANNEL_ID: ${{ inputs.channel_id }}
         run: |
           set -euo pipefail
-          npx --yes --ignore-scripts firebase-tools@latest hosting:channel:deploy "$CHANNEL_ID"             --project "$FIREBASE_PROJECT_ID" --json | tee firebase-preview-output.json
+          npx --yes firebase-tools@latest hosting:channel:deploy "$CHANNEL_ID"             --project "$FIREBASE_PROJECT_ID" --json | tee firebase-preview-output.json
 
           PREVIEW_URL="$(node --input-type=module <<'NODE'
           import {readFile} from 'node:fs/promises';
@@ -122,13 +127,34 @@ jobs:
           NODE
           )"
 
-          echo "PREVIEW_URL=$PREVIEW_URL" >> "$GITHUB_ENV"
+          echo "preview_url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
           echo "### Firebase preview" >> "$GITHUB_STEP_SUMMARY"
           echo "Target ref: ${{ inputs.target_ref }}" >> "$GITHUB_STEP_SUMMARY"
           echo "Preview URL: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Install Chromium for preview smoke
-        run: npx playwright install --with-deps chromium
+  smoke:
+    name: deployed-browser-smoke
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    env:
+      PREVIEW_URL: ${{ needs.deploy.outputs.preview_url }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.target_ref }}
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install browser test dependencies
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund
+          npx playwright install --with-deps chromium
 
       - name: Smoke-test deployed preview
         env:
@@ -141,7 +167,7 @@ jobs:
         run: |
           echo "### Preview QA" >> "$GITHUB_STEP_SUMMARY"
           echo "Workflow status: ${{ job.status }}" >> "$GITHUB_STEP_SUMMARY"
-          if [ -n "${PREVIEW_URL:-}" ]; then echo "Preview URL: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"; fi
+          echo "Preview URL: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
 
 # Bootstrap note:
 # GitHub requires workflow_dispatch workflows to exist on the default branch.
