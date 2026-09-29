@@ -57,7 +57,7 @@ Primary path remains Firebase Hosting + Firebase AI Logic/Gemini + Anonymous Aut
 ## Verification actually obtained
 
 Local reconstructed verification mirror results observed after the Decision Command Center work:
-- **76/76 Node tests passed** across reliability, UI-state, UI-contract and analytics suites.
+- **77/77 Node tests passed** across reliability, UI-state, UI-contract and analytics suites.
 - **13/13 Python pytest tests passed** for the retained reference backend/rule checks.
 - All current public JS/MJS files passed `node --check`.
 - DOM scan: no duplicate IDs and no missing element IDs referenced by `app.js`.
