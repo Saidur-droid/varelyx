@@ -7,7 +7,12 @@ export function buildViewModel(state, draftSource = '', connected = false, saveS
   const proofStatus = stale ? 'STALE' : (state.proof?.status ?? 'NOT_RUN');
   const decisionStatus = holds.length ? 'HOLD' : (state.proof?.status === 'PASS' ? 'PROVEN' : 'READY');
   const question = nextQuestion(state);
-  const unresolvedEvidenceCount = question.candidates.length + (!state.liveVerified ? 1 : 0) + (!state.evidenceReviewed ? 1 : 0);
+  const unresolvedEvidenceCount = !state.liveVerified || !state.extraction ? null : [
+    state.extraction.delay_hours === null,
+    state.extraction.affected_routes === null,
+    String(state.extraction.supplier ?? '').trim().toLowerCase() !== 'supplier b',
+    !state.evidenceReviewed || state.supplierCapacity === null
+  ].filter(Boolean).length;
   const proofFreshness = stale ? 'STALE' : state.proof ? 'CURRENT' : 'NOT_RUN';
   const decisionState = stale ? 'STALE_PROOF'
     : !state.liveVerified ? 'WAITING_FOR_ANALYSIS'
