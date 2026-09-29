@@ -12,7 +12,8 @@ test('cloud CI setup documents complete keyless WIF bootstrap and root-cause dia
     'roles/iam.workloadIdentityUser','roles/firebasehosting.admin','roles/serviceusage.serviceUsageConsumer',
     'GCP_WORKLOAD_IDENTITY_PROVIDER','GCP_SERVICE_ACCOUNT','FIREBASE_PROJECT_ID',
     'gh variable set','gh api','service-account JSON','Troubleshooting',
-    'PROJECT_NUMBER','WORKLOAD_IDENTITY_POOL','WORKLOAD_IDENTITY_PROVIDER','SERVICE_ACCOUNT_EMAIL'
+    'PROJECT_NUMBER','WORKLOAD_IDENTITY_POOL','WORKLOAD_IDENTITY_PROVIDER','SERVICE_ACCOUNT_EMAIL',
+    'repository_id','repository_owner_id','workflow_ref','workflow_dispatch','1363183610','306319519'
   ];
   for(const text of required) assert.ok(doc.toLowerCase().includes(text.toLowerCase()), text);
 });
