@@ -8,13 +8,13 @@ Production URL recorded in the prior deployment handoff: https://varelyx-ai-buil
 
 ## Read this first
 
-The reliability implementation and premium decision-workspace redesign are on `fix/firebase-verification-20260929`. They are not certified as deployed or production-ready. Read `docs/FIREBASE_FIX_REPORT_2026-09-29.md`, `docs/superpowers/specs/2026-09-29-premium-decision-workspace-design.md`, `docs/superpowers/plans/2026-09-29-premium-decision-workspace.md`, and `docs/PREVIEW_REVIEW_CHECKLIST.md`.
+The reliability implementation and premium decision-workspace redesign are on `fix/firebase-verification-20260929`. They are not certified as deployed or production-ready. Read `docs/FIREBASE_FIX_REPORT_2026-09-29.md`, `docs/superpowers/specs/2026-09-29-premium-decision-workspace-design.md`, `docs/superpowers/plans/2026-09-29-decision-command-center-uiux.md`, and `docs/PREVIEW_REVIEW_CHECKLIST.md`.
 
 Do not treat the existing `NEXT_STEPS.md`, `DEPLOYMENT_STATUS.md` or prepared submission copy as evidence that the new branch has passed live QA.
 
 ## Product and non-negotiable goals
 
-KNOW -> ASK -> PROVE -> ACT.
+KNOW -> ASK -> DECIDE -> PROVE -> ACT.
 
 Interpret disruption evidence, expose uncertainty, ask for decision-critical information, compute quantities deterministically, independently verify encoded constraints, and require human approval before storing sandbox action records.
 
@@ -41,26 +41,33 @@ Primary path remains Firebase Hosting + Firebase AI Logic/Gemini + Anonymous Aut
 
 ## Premium decision-workspace redesign implemented on the branch
 
-- Premium Command Center and five-stage Signal -> Evidence -> Decision -> Proof -> Action narrative.
+- Operations-first Decision Command Center with the Varelyx sequence **KNOW -> ASK -> DECIDE -> PROVE -> ACT**.
 - Persistent Firebase / Gemini / Evidence / Proof / Save status bar.
-- Evidence Board with Confirmed / Estimated / Unknown presentation and source-grounded evidence display.
+- Signal + Evidence investigation workspace with Confirmed / Estimated / Unknown / Stale states, source-grounded evidence, and visible evidence freshness.
 - Evidence Scout promoted as the decision-critical missing-fact workflow.
-- Scenario hierarchy with a non-superlative **Balanced demo candidate** plus direct trade-off comparison.
+- DECIDE workspace with a non-superlative **Balanced demo candidate**, compact alternatives, and a direct trade-off matrix.
 - Signature Proof Gate presentation with PASS / HOLD / BLOCK, constraint details and copyable SHA-256 receipt.
-- Explicit human approval boundary and sandbox-only action language.
+- Explicit AI analysis -> deterministic proof -> **human authorization** boundary, approval summary and sandbox-only action ledger.
 - Shadow Mode and chronological audit timeline.
 - Responsive 1440 / 1280 / 390 design contracts, visible keyboard focus, reduced-motion support and text-labelled status states.
 - Privacy-safe optional analytics adapter; analytics failure cannot block the judge flow and raw supplier evidence is stripped.
-- Matching Figma review file: https://www.figma.com/design/L96hoZxuZmi4I45jeP6Iqy
+- Existing Figma review file: https://www.figma.com/design/L96hoZxuZmi4I45jeP6Iqy . Final sync to the latest Decision Command Center was blocked by the Figma Starter-plan MCP call limit; GitHub is authoritative.
 - Production has NOT been overwritten. Firebase preview deployment is the next release gate.
 
 ## Verification actually obtained
 
-Local Node test result observed during implementation: 31 passed / 31 tests. This covers deterministic logic and mocked transport, including a 140-plan boundary matrix inside one test.
+Local reconstructed verification mirror results observed after the Decision Command Center work:
+- **76/76 Node tests passed** across reliability, UI-state, UI-contract and analytics suites.
+- **13/13 Python pytest tests passed** for the retained reference backend/rule checks.
+- All current public JS/MJS files passed `node --check`.
+- DOM scan: no duplicate IDs and no missing element IDs referenced by `app.js`.
+- CSS structural parse: balanced braces and no reported top-level parser errors.
 
-NOT verified: real Firebase writes, real Gemini inference, App Check enforcement, actual browser flow, mobile visuals, production deployment or final submission. Browser navigation was blocked by the execution environment. No live screenshot or video was fabricated.
+These results verify the reconstructed test mirror, not a deployed Firebase environment. The authorized Windows device is currently offline, so an exact-checkout run on that machine remains a release gate.
 
-The latest redesign PR run (GitHub Actions run 36580552758) also completed as failure before reported job steps: both `web` and `test` jobs returned no runner name and no steps. This still does not establish a test assertion failure. Root cause remains unconfirmed. Full exact-branch verification must run on the authorized machine before preview deploy.
+NOT verified: real Firebase writes on the redesigned preview, real Gemini inference on the redesigned preview, App Check preview-domain behavior, actual visual browser QA at 1440/1280/390, production deployment or final submission. Local headless Chromium did not complete in this execution environment. No live screenshot or video was fabricated.
+
+The latest redesign PR run (GitHub Actions run **36595560628**) also completed as failure before reported job steps: both `web` and `test` jobs returned no runner and `steps: null`. This still does not establish a test assertion failure. Root cause remains unconfirmed.
 
 ## Immediate P0 queue
 
