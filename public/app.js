@@ -12,6 +12,7 @@ let state = initialState(), session = null, model = null, busy = false, connecte
 let lastSave = null;
 const status = $('#persistenceStatus');
 const exporter = $('#exportBtn');
+const copyReceiptBtn = $('#copyReceiptBtn');
 const analytics = createAnalyticsAdapter(globalThis.posthog ?? null);
 analytics.capture('demo_session_started',{mode:'controlled_simulation'});
 
@@ -101,6 +102,10 @@ function render() {
     + [['Transfer',p.transfer_cases],['Supplier B',p.supplier_b_cases],['Emergency',p.emergency_cases],['Cash (BDT)',p.cash_required_bdt],['Expected stockout',p.expected_stockout_cases],['Robustness (%)',p.robustness_pct]]
       .map(([k,v]) => '<div class="kv"><span>' + escape(k) + '</span><b>' + escape(v) + '</b></div>').join('') + '</article>').join('');
 
+  $('#strategyComparison').innerHTML = '<table><thead><tr><th>Measure</th>' + plans.map(p => '<th>' + escape(p.id === 'balanced' ? 'Balanced candidate' : p.name) + '</th>').join('') + '</tr></thead><tbody>'
+    + [['Transfer', 'transfer_cases'],['Supplier B','supplier_b_cases'],['Emergency','emergency_cases'],['Cash (BDT)','cash_required_bdt'],['Expected stockout','expected_stockout_cases'],['Robustness (%)','robustness_pct']]
+      .map(([label,key]) => '<tr><td>' + escape(label) + '</td>' + plans.map(p => '<td>' + escape(p[key]) + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
+
   $('#proof').innerHTML = state.proof
     ? '<span class="panel-label">PROOF RESULT</span><h2 class="' + escape(state.proof.status) + '">' + escape(state.proof.status) + '</h2>'
       + '<small style="overflow-wrap:anywhere">SHA-256 receipt: ' + escape(state.proof.receipt_hash) + '</small>'
@@ -122,6 +127,7 @@ function render() {
 
   document.querySelectorAll('button').forEach(b => { b.disabled = busy || !connected || session?.blocked; });
   exporter.disabled = busy;
+  copyReceiptBtn.disabled = busy || !state.proof?.receipt_hash;
   $('#approveBtn').disabled ||= vm.holds.length > 0 || state.proof?.status !== 'PASS';
   $('#disruptionInput').disabled = busy;
   $('#capacityInput').disabled = busy;
@@ -204,6 +210,12 @@ $('#resetBtn').onclick = () => operation(async () => {
   if (next.archive.length > 1000) throw Error('Archive limit reached. Export QA evidence before starting another session.');
   await save(next);
 });
+
+copyReceiptBtn.onclick = async () => {
+  if (!state.proof?.receipt_hash) return;
+  try { await navigator.clipboard.writeText(state.proof.receipt_hash); message('Proof receipt copied to clipboard.'); }
+  catch { message('Could not copy receipt automatically. Use the visible SHA-256 receipt instead.', true); }
+};
 
 exporter.onclick = () => {
   const content = {exportedAt:new Date().toISOString(),scope:'Controlled simulation. Not retailer outcomes or external dispatch.',backendReadBack:lastSave,state};
