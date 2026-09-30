@@ -60,7 +60,7 @@ test('unanalyzed unresolved evidence is not rendered as a fake number',()=>asser
 
 test('system status uses customer-friendly readiness language',()=> {
   for (const label of ['AI connecting','Waiting for analysis','Proof pending','Save pending']) assert.match(html,new RegExp(label));
-  for (const label of ['Firebase Ready','AI Ready','AI Verified','Review required','Evidence reviewed','Save verified']) assert.match(app,new RegExp(label));
+  for (const label of ['Firebase Ready','AI Ready','AI Verified','Review required','Evidence reviewed','Save verified']) assert.match(i18n,new RegExp(label));
   assert.doesNotMatch(html,/Gemini not run|Save not verified|Proof not run/);
 });
 
