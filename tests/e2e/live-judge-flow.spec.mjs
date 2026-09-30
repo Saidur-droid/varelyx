@@ -1,9 +1,16 @@
 import {test, expect} from '@playwright/test';
 
-test('real judge flow: Firebase + Gemini + HOLD/PASS/BLOCK + approval + reload restore', async ({page}) => {
+async function enableCiAppCheck(page) {
+  const token = process.env.FIREBASE_APPCHECK_DEBUG_TOKEN;
+  if (token) await page.addInitScript(value => { self.FIREBASE_APPCHECK_DEBUG_TOKEN = value; }, token);
+}
+
+test('real judge flow: Firebase + Gemini + HOLD/PASS/BLOCK + approval + reload restore', async ({page}, testInfo) => {
   test.skip(process.env.LIVE_JUDGE_FLOW !== '1', 'Run only against the official Firebase deployment');
-  test.setTimeout(120_000);
+  test.skip(testInfo.project.name !== 'desktop-1440', 'Run the real mutating judge flow once; responsive coverage is handled separately');
+  test.setTimeout(180_000);
   page.on('dialog', dialog => dialog.accept());
+  await enableCiAppCheck(page);
 
   await page.goto('/', {waitUntil:'domcontentloaded'});
 
@@ -14,7 +21,7 @@ test('real judge flow: Firebase + Gemini + HOLD/PASS/BLOCK + approval + reload r
   await page.locator('#disruptionInput').fill(syntheticSignal);
   await page.locator('#analyzeBtn').click();
 
-  await expect(page.locator('#geminiResult')).toContainText('LIVE GEMINI VERIFIED', {timeout:45_000});
+  await expect(page.locator('#geminiResult')).toContainText('LIVE GEMINI VERIFIED', {timeout:60_000});
   await expect(page.locator('#decisionBanner')).toContainText('HOLD');
 
   await page.locator('#capacityInput').fill('120');
