@@ -24,7 +24,7 @@ export const translations = {
     proofHelp:'Evidence is reviewed. Run the Proof Gate on the selected candidate.',
     approvalHelp:'Proof passed. Human approval is required before saving sandbox actions.',
     savedHelp:'Decision saved and verified from Firebase.',
-    incidentKicker:'RETAIL DISRUPTION WORKSPACE',
+    incidentKicker:'LIVE RETAIL CONTINUITY INCIDENT',
     controlled:'Controlled simulation',
     analyze:'Analyze disruption',
     inspect:'Inspect evidence',
