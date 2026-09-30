@@ -35,14 +35,30 @@ function evidenceCard(item, mode) {
   return '<div class="evidence-card"><b>'+escape(item.label)+'</b><div>'+escape(item.value)+'</div>'
     +(quote?'<small>Source: “'+escape(quote)+'”</small>':'')
     +(confidence?'<small> · '+escape(confidence)+'</small>':'')
-    +'<small> · '+escape(mode==='known'?'Operator reviewed':mode==='estimated'?'Gemini extracted / controlled input':'Decision-critical unknown')+'</small></div>';
+    +'<small> · '+escape(mode==='known'?t('confirmedState'):mode==='estimated'?t('estimatedState'):t('unknownState'))+'</small></div>';
 }
 function auditLabel(event) {
   return ({LIVE_EVIDENCE_EXTRACTED:'Live Gemini evidence extracted',OPERATOR_EVIDENCE_CONFIRMED:'Operator reviewed evidence',APPROVAL_PREPARED:'Human approval prepared'})[event]
     || event.replaceAll('_',' ').toLowerCase().replace(/^./, c=>c.toUpperCase());
 }
 function humanDecisionState(value) {
-  return ({WAITING_FOR_ANALYSIS:'Waiting for analysis',WAITING_FOR_EVIDENCE_REVIEW:'Evidence review required',READY_FOR_PROOF:'Ready for Proof Gate',READY_FOR_HUMAN_APPROVAL:'Ready for human approval',STALE_PROOF:'Proof is stale',BLOCKED_BY_PROOF:'Blocked by Proof Gate',HELD_BY_PROOF:'Held by Proof Gate'})[value] || value;
+  return ({
+    WAITING_FOR_ANALYSIS:t('stateWaiting'),
+    WAITING_FOR_EVIDENCE_REVIEW:t('stateReview'),
+    READY_FOR_PROOF:t('stateProof'),
+    READY_FOR_HUMAN_APPROVAL:t('stateApproval'),
+    STALE_PROOF:t('stateStale'),
+    BLOCKED_BY_PROOF:t('stateBlocked'),
+    HELD_BY_PROOF:t('stateHeld')
+  })[value] || value;
+}
+function nextStepFor(vm) {
+  if (!connected) return {href:'#commandCenter', label:t('nextStep')};
+  if (!state.liveVerified) return {href:'#evidenceWorkspace', label:t('analyze')};
+  if (!state.evidenceReviewed) return {href:'#evidenceScout', label:t('reviewEvidenceCta')};
+  if (state.proof?.status!=='PASS' || vm.stale) return {href:'#proofWorkspace', label:t('runProofCta')};
+  if (!state.actions.length) return {href:'#actionWorkspace', label:t('approveCta')};
+  return {href:'#auditWorkspace', label:t('auditCta')};
 }
 function render() {
   const vm = buildViewModel(state, $('#disruptionInput').value, connected, lastSave);
@@ -54,26 +70,28 @@ function render() {
   chip('#reviewState', state.evidenceReviewed?t('evidenceReviewed'):state.liveVerified?t('reviewRequired'):t('waitingAnalysis'), state.evidenceReviewed?'ok':state.liveVerified?'warn':'neutral');
   chip('#proofState', state.proof?.status==='PASS'?t('proofPass'):state.proof?.status==='BLOCK'?t('proofBlock'):vm.system.proof==='STALE'?t('proofStale'):t('proofPending'), state.proof?.status==='PASS'?'ok':state.proof?.status==='BLOCK'?'bad':vm.system.proof==='STALE'?'warn':'neutral');
   chip('#saveState', lastSave?.verified?t('saveVerified'):t('savePending'), lastSave?.verified?'ok':'neutral');
-  const helper=$('#statusHelper');
+  const helper=$('#statusHelperText');
   if(helper) helper.textContent = lastSave?.verified?t('savedHelp'):state.proof?.status==='PASS'?t('approvalHelp'):state.evidenceReviewed?t('proofHelp'):state.liveVerified?t('reviewHelp'):t('readyHelp');
+  const nextStep=nextStepFor(vm), nextStepBtn=$('#nextStepBtn');
+  if(nextStepBtn){ nextStepBtn.textContent=nextStep.label; nextStepBtn.href=nextStep.href; }
 
   document.querySelectorAll('[data-stage]').forEach(el=>{const value=stages[el.dataset.stage];el.className='stage '+value;el.setAttribute('aria-current',value==='active'?'step':'false');});
 
   const baseline=plans.find(p=>p.id==='current').expected_stockout_cases;
-  $('#incidentTitle').textContent = ex?.supplier ? ex.supplier + ' disruption threatens Thursday availability.' : 'Supplier disruption awaiting analysis.';
+  $('#incidentTitle').textContent = ex?.supplier ? t('incidentLiveTitle',{supplier:ex.supplier}) : t('incidentWaitingTitle');
   $('#incidentSummary').textContent = state.liveVerified
-    ? 'Gemini found ' + (ex?.delay_hours ?? 'unknown') + ' hours of delay and ' + (ex?.affected_routes ?? 'unknown') + ' affected routes. Varelyx will not advance executable decisions until evidence is reviewed.'
-    : 'Use live Gemini to structure the supplier signal, then Varelyx will expose uncertainty before any operational decision is allowed.';
+    ? t('incidentLiveSummary',{hours:ex?.delay_hours ?? t('unknown'),routes:ex?.affected_routes ?? t('unknown')})
+    : t('incidentWaitingSummary');
   $('#decisionStateValue').textContent = humanDecisionState(vm.decisionState);
   $('#decisionStateDetail').textContent = vm.holds[0] ?? 'Reviewed evidence is ready for deterministic decisioning.';
-  $('#unresolvedEvidenceValue').textContent = vm.unresolvedEvidenceCount === null ? 'Not assessed' : String(vm.unresolvedEvidenceCount);
-  $('#nextActionValue').textContent = vm.nextAction.label;
-  $('#nextActionDetail').textContent = vm.nextAction.disabled ? 'Firebase verification is required before this action.' : 'This is the safest next step for the current decision state.';
+  $('#unresolvedEvidenceValue').textContent = vm.unresolvedEvidenceCount === null ? t('notAssessed') : String(vm.unresolvedEvidenceCount);
+  $('#nextActionValue').textContent = nextStepFor(vm).label;
+  $('#nextActionDetail').textContent = vm.nextAction.disabled ? t('firebaseRequired') : t('nextSafe');
 
   $('#metrics').innerHTML=[['Stockout exposure',baseline,'cases · controlled simulation'],['Supplier capacity',state.supplierCapacity??'—',state.evidenceReviewed?'cases · confirmed':'cases · unconfirmed'],['Balanced stockout',balanced.expected_stockout_cases,'cases · controlled simulation'],['Robustness',balanced.robustness_pct+'%','fixed demand scenarios']].map(([k,v,s])=>'<div class="metric"><b>'+escape(v)+'</b><span>'+escape(k)+'</span><small>'+escape(s)+'</small></div>').join('');
 
   const evidence=[{label:'Supplier',value:ex?.supplier,known:state.evidenceReviewed},{label:'Delivery delay (hours)',value:ex?.delay_hours,known:state.evidenceReviewed},{label:'Affected routes',value:ex?.affected_routes,known:state.evidenceReviewed},{label:'Thursday capacity (cases)',value:state.supplierCapacity,known:state.evidenceReviewed},{label:'Demand scenarios (cases)',value:POLICY.demand.join(', '),known:false}];
-  for(const group of ['known','estimated','unknown']){const rows=evidence.filter(e=>(e.value==null?'unknown':e.known?'known':'estimated')===group);$('#'+group).innerHTML=rows.map(e=>evidenceCard(e,group)).join('')||'<p class="hint">None</p>';}
+  for(const group of ['known','estimated','unknown']){const rows=evidence.filter(e=>(e.value==null?'unknown':e.known?'known':'estimated')===group);$('#'+group).innerHTML=rows.map(e=>evidenceCard(e,group)).join('')||'<p class="hint">'+escape(t('none'))+'</p>';}
   $('#evidenceFreshness').textContent = vm.stale ? 'Stale — signal edited' : state.liveVerified ? (state.evidenceReviewed ? 'Current · operator reviewed' : 'Current · review required') : 'Stale until analyzed';
   $('#evidenceFreshness').className = 'evidence-freshness ' + (vm.stale || !state.liveVerified ? 'stale' : 'current');
   $('#decisionBanner').textContent=vm.holds.length?'HOLD — '+vm.holds.join('; '):'DECISION READY — reviewed evidence can enter Proof Gate';
@@ -88,10 +106,14 @@ function render() {
   $('#alternativeStrategyCards').innerHTML=plans.filter(p=>p.id!=='balanced').map(p=>'<article class="alternative-card"><div><b>'+escape(p.name)+'</b><small>'+escape(p.expected_stockout_cases)+' expected stockout · '+escape(p.robustness_pct)+'% robustness</small></div><strong>BDT '+escape(p.cash_required_bdt)+'</strong></article>').join('');
   $('#strategyComparison').innerHTML='<table><thead><tr><th>Measure</th>'+plans.map(p=>'<th>'+escape(p.id==='balanced'?'Balanced candidate':p.name)+'</th>').join('')+'</tr></thead><tbody>'+[['Transfer','transfer_cases'],['Supplier B','supplier_b_cases'],['Emergency','emergency_cases'],['Cash (BDT)','cash_required_bdt'],['Expected stockout','expected_stockout_cases'],['Robustness (%)','robustness_pct']].map(([label,key])=>'<tr><td>'+escape(label)+'</td>'+plans.map(p=>'<td>'+escape(p[key])+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 
-  $('#proofFreshness').textContent = vm.proofFreshness === 'STALE' ? 'Stale — re-analysis required' : vm.proofFreshness === 'CURRENT' ? 'Current evidence' : 'Not run';
+  $('#proofFreshness').textContent = vm.proofFreshness === 'STALE' ? t('proofFreshStale') : vm.proofFreshness === 'CURRENT' ? t('proofFreshCurrent') : t('proofFreshNotRun');
   $('#proofFreshness').className='proof-freshness '+(vm.proofFreshness==='STALE'?'stale':vm.proofFreshness==='CURRENT'?'current':'');
   $('#proof').innerHTML=state.proof?'<div class="proof-hero"><span>Proof result</span><h2 class="'+escape(state.proof.status)+'">'+escape(state.proof.status)+'</h2><small class="receipt-hash">SHA-256 receipt: '+escape(state.proof.receipt_hash)+'</small></div>'+state.proof.checks.map(c=>'<div class="check"><div class="check-rule"><b>'+escape(c.name)+'</b></div><div class="check-observed">'+escape(c.detail)+'</div><div class="status '+escape(c.status)+'">'+escape(c.status)+'</div></div>').join(''):'<div class="proof-hero"><span>Proof result</span><h3>Waiting for a candidate</h3><p class="hint">No plan proven for the current evidence.</p></div>';
-  $('#approvalNumbers').innerHTML='<div><span>Transfer</span><b>'+escape(balanced.transfer_cases)+'</b></div><div><span>Supplier B</span><b>'+escape(balanced.supplier_b_cases)+'</b></div><div><span>Emergency</span><b>'+escape(balanced.emergency_cases)+'</b></div><div><span>Cash</span><b>BDT '+escape(balanced.cash_required_bdt)+'</b></div><small>'+(state.proof?.status==='PASS'&&!vm.stale?'Current proof PASS — human authorization available.':'Awaiting a current PASS before authorization.')+'</small>';
+  const approvalReady=state.proof?.status==='PASS'&&!vm.stale;
+  const approvalText=approvalReady?t('approvalReady'):vm.stale?t('approvalStale'):state.proof?.status==='BLOCK'?t('approvalBlocked'):t('approvalNeedsProof');
+  $('#approvalNumbers').innerHTML='<div><span>Transfer</span><b>'+escape(balanced.transfer_cases)+'</b></div><div><span>Supplier B</span><b>'+escape(balanced.supplier_b_cases)+'</b></div><div><span>Emergency</span><b>'+escape(balanced.emergency_cases)+'</b></div><div><span>Cash</span><b>BDT '+escape(balanced.cash_required_bdt)+'</b></div><small>'+escape(approvalText)+'</small>';
+  const approvalReason=$('#approvalReason');
+  if(approvalReason) approvalReason.textContent=state.actions.length?t('approvalSaved'):busy?t('approvalBusy'):approvalText;
   $('#actions').innerHTML=state.actions.length?state.actions.map(a=>'<div class="action-card"><b>'+escape(a.type)+'</b><div>'+escape(a.status===SANDBOX_STATUS?SANDBOX_STATUS:a.status)+'</div><small>'+escape(JSON.stringify(a.payload))+'</small></div>').join(''):'<p class="hint">No verified saved actions. Sandbox only; no external order is sent.</p>';
   $('#shadow').innerHTML='<div class="shadow-bars"><div class="shadow-card"><span>Current response</span><b>'+escape(baseline)+'</b><small>expected stockout cases</small></div><div class="shadow-card"><span>Varelyx balanced</span><b>'+escape(balanced.expected_stockout_cases)+'</b><small>expected stockout cases</small></div></div><p class="hint">Same fixed demand scenario set. Route cap: '+escape(routeLimit(ex?.affected_routes??null))+' cases under the disclosed controlled policy.</p>';
   const audit=[...state.audit].sort((a,b)=>String(a.at).localeCompare(String(b.at)));
