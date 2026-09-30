@@ -12,7 +12,7 @@ test('Decision Command Center renders safely without page-level overflow', async
   await expect(page.getByText('LIVE RETAIL CONTINUITY INCIDENT')).toBeVisible();
   for (const label of ['KNOW','ASK','DECIDE','PROVE','ACT']) await expect(page.getByText(label,{exact:true})).toBeVisible();
   await expect(page.getByText(/Human authorization/i).first()).toBeVisible();
-  await expect(page.getByText(/Controlled simulation/i).first()).toBeVisible();
+  await expect(page.locator('.incident-scope')).toHaveText('Controlled simulation');
   await expect(page.getByText('PASS',{exact:true}).first()).toBeVisible();
   await expect(page.getByText('HOLD',{exact:true}).first()).toBeVisible();
   await expect(page.getByText('BLOCK',{exact:true}).first()).toBeVisible();
