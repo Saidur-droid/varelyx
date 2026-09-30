@@ -1,6 +1,7 @@
 import {test, expect} from '@playwright/test';
 
 test('real judge flow: Firebase + Gemini + HOLD/PASS/BLOCK + approval + reload restore', async ({page}) => {
+  test.skip(process.env.LIVE_JUDGE_FLOW !== '1', 'Run only against the official Firebase deployment');
   test.setTimeout(120_000);
   page.on('dialog', dialog => dialog.accept());
 
