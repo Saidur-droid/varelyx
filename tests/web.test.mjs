@@ -123,6 +123,12 @@ test('permission denied is visible and blocks automatic retries', async () => {
   await assert.rejects(()=>s.save(ready()),/NOT VERIFIED/); assert.equal(s.blocked,true);
   await assert.rejects(()=>s.save(ready()),/Reload/);
 });
+test('network failure is NOT VERIFIED and forces reload reconciliation', async () => {
+  const s=new VerifiedSession({read:async()=>null,write:async()=>{throw Error('network request failed');}});
+  await assert.rejects(()=>s.save(ready()),/Firebase save NOT VERIFIED/);
+  assert.equal(s.blocked,true);
+  await assert.rejects(()=>s.save(ready()),/Reload/);
+});
 test('read-back mismatch never claims success', async () => {
   const s=new VerifiedSession({read:async()=>null,write:async()=>{}});
   await assert.rejects(()=>s.save(ready()),/did not verify/); assert.equal(s.revision,0);
@@ -149,6 +155,20 @@ test('Firebase transport uses scoped authenticated no-cache reads and conditiona
   assert.ok(calls.every(c=>new URL(c.url).pathname==='/demoSessions/test-user/verified_v2.json'));
   assert.ok(calls.every(c=>c.init.cache==='no-store' && c.init.headers['X-Firebase-AppCheck']==='test-appcheck'));
   assert.ok(calls.some(c=>c.init.method==='PUT' && c.init.headers['if-match']==='"0"'));
+});
+test('different anonymous users are isolated to different RTDB paths', async () => {
+  const calls=[];
+  const make = uid => createRestTransport({
+    databaseURL:'https://test.firebasedatabase.app',
+    user:{uid,getIdToken:async()=>uid+'-token'},
+    appCheckToken:async()=>'check',
+    fetchImpl:async(url,init)=>{calls.push({uid,url,init}); return new Response('null',{headers:{etag:'"0"'}});}
+  });
+  await make('user-a').read();
+  await make('user-b').read();
+  assert.equal(new URL(calls[0].url).pathname,'/demoSessions/user-a/verified_v2.json');
+  assert.equal(new URL(calls[1].url).pathname,'/demoSessions/user-b/verified_v2.json');
+  assert.notEqual(new URL(calls[0].url).pathname,new URL(calls[1].url).pathname);
 });
 test('Firebase denied read is not mistaken for an empty session', async () => {
   await assert.rejects(()=>restFixture({denied:true}).transport.read(),/HTTP 401/);
