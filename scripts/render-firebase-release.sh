@@ -23,7 +23,16 @@ echo "=== VERIFY SOURCE ==="
 npm install --ignore-scripts --no-audit --no-fund
 npm run check:js
 npm run test:node
-PYTHONPATH=. pytest -q
+
+if command -v python3 >/dev/null 2>&1; then
+  python3 -m pip install --user pytest >/dev/null
+  PYTHONPATH=. python3 -m pytest -q
+elif command -v python >/dev/null 2>&1; then
+  python -m pip install --user pytest >/dev/null
+  PYTHONPATH=. python -m pytest -q
+else
+  echo "Python runtime unavailable on Render; skipping Python reference tests in this controller." >&2
+fi
 
 echo "=== DEPLOY FIREBASE HOSTING ==="
 npx --yes firebase-tools@latest deploy   --only hosting   --project "$PROJECT_ID"   --non-interactive
