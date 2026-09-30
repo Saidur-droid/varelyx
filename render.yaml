@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: varelyx-preview-qa
+    runtime: node
+    plan: free
+    region: singapore
+    repo: https://github.com/Saidur-droid/varelyx
+    branch: fix/firebase-verification-20260929
+    autoDeploy: true
+    buildCommand: npm install --ignore-scripts --no-audit --no-fund && npm run check:js && npm run test:node
+    startCommand: npx --yes serve@14 public -l $PORT
+    healthCheckPath: /
