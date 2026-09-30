@@ -25,10 +25,10 @@ npm run check:js
 npm run test:node
 
 if command -v python3 >/dev/null 2>&1; then
-  python3 -m pip install pytest >/dev/null
+  python3 -m pip install -r requirements.txt >/dev/null
   PYTHONPATH=. python3 -m pytest -q
 elif command -v python >/dev/null 2>&1; then
-  python -m pip install pytest >/dev/null
+  python -m pip install -r requirements.txt >/dev/null
   PYTHONPATH=. python -m pytest -q
 else
   echo "Python runtime unavailable on Render; skipping Python reference tests in this controller." >&2
