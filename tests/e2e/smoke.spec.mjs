@@ -47,3 +47,12 @@ test('language can switch to Bangla and persists on reload', async ({page}) => {
   await selector.selectOption('en');
   await expect(page.getByRole('button',{name:'Analyze disruption',exact:true})).toBeVisible();
 });
+
+test('next-step helper and approval reason are visible', async ({page}) => {
+  await waitForLatestUi(page);
+  await expect(page.locator('#statusHelperText')).toBeVisible();
+  await expect(page.locator('#nextStepBtn')).toBeVisible();
+  await expect(page.locator('#approvalReason')).toBeVisible();
+  const href=await page.locator('#nextStepBtn').getAttribute('href');
+  expect(href).toMatch(/^#/);
+});
