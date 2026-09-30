@@ -30,6 +30,12 @@ test('real judge flow: Firebase + Gemini + HOLD/PASS/BLOCK + approval + reload r
 
   await page.locator('[data-proof="balanced"]').click();
   await expect(page.locator('#proof')).toContainText('PASS', {timeout:20_000});
+  if (process.env.EVIDENCE_CAPTURE === '1') {
+    await page.screenshot({
+      path: testInfo.outputPath('varelyx-desktop-1440-pass.png'),
+      fullPage: true
+    });
+  }
 
   await page.locator('[data-proof="unverified-aggressive"]').click();
   await expect(page.locator('#proof')).toContainText('BLOCK', {timeout:20_000});
@@ -40,6 +46,12 @@ test('real judge flow: Firebase + Gemini + HOLD/PASS/BLOCK + approval + reload r
   await page.locator('#approveBtn').click();
   await expect(persistence).toContainText('FIREBASE SAVE VERIFIED', {timeout:20_000});
   await expect(page.locator('#actions')).toContainText('APPROVED_SANDBOX');
+  if (process.env.EVIDENCE_CAPTURE === '1') {
+    await page.screenshot({
+      path: testInfo.outputPath('varelyx-desktop-1440-save-verified.png'),
+      fullPage: true
+    });
+  }
 
   await page.reload({waitUntil:'domcontentloaded'});
   await expect(persistence).toContainText('Restored directly from Firebase', {timeout:30_000});
