@@ -1,0 +1,223 @@
+const STORAGE_KEY = 'varelyx-language';
+
+export const translations = {
+  en: {
+    language:'Language',
+    topKicker:'LIVE DECISION WORKSPACE',
+    topScenario:'Bangladesh continuity scenario',
+    firebaseConnecting:'Firebase connecting',
+    firebaseReady:'Firebase Ready',
+    aiConnecting:'AI connecting',
+    aiReady:'AI Ready',
+    aiVerified:'AI Verified',
+    waitingAnalysis:'Waiting for analysis',
+    reviewRequired:'Review required',
+    evidenceReviewed:'Evidence reviewed',
+    proofPending:'Proof pending',
+    proofPass:'Proof PASS',
+    proofBlock:'Proof BLOCK',
+    proofStale:'Proof stale',
+    savePending:'Save pending',
+    saveVerified:'Save verified',
+    readyHelp:'Everything is connected. Start by analyzing the supplier signal.',
+    reviewHelp:'AI analysis is complete. Review the extracted evidence before a decision.',
+    proofHelp:'Evidence is reviewed. Run the Proof Gate on the selected candidate.',
+    approvalHelp:'Proof passed. Human approval is required before saving sandbox actions.',
+    savedHelp:'Decision saved and verified from Firebase.',
+    incidentKicker:'RETAIL DISRUPTION WORKSPACE',
+    controlled:'Controlled simulation',
+    analyze:'Analyze disruption',
+    inspect:'Inspect evidence',
+    reset:'Reset demo',
+    decisionState:'Decision state',
+    unresolved:'Unresolved evidence',
+    nextAction:'Next best action',
+    stageSignal:'Signal',
+    stageSignalSub:'Disruption received',
+    stageEvidence:'Evidence',
+    stageEvidenceSub:'Known vs unknown',
+    stageDecision:'Decision',
+    stageDecisionSub:'Trade-offs computed',
+    stageProof:'Proof',
+    stageProofSub:'Constraints verified',
+    stageAction:'Action',
+    stageActionSub:'Human approval',
+    evidenceEyebrow:'02 · KNOW + ASK',
+    evidenceTitle:'Investigate the disruption before deciding.',
+    evidenceIntro:'Signal, provenance, uncertainty and the decision-critical missing fact stay on one surface.',
+    incoming:'INCOMING SIGNAL',
+    supplierEvidence:'Supplier / operations evidence',
+    analyzeSignal:'Analyze this signal',
+    matrix:'EVIDENCE MATRIX',
+    confirmed:'Confirmed',
+    estimated:'Estimated',
+    unknown:'Unknown',
+    stale:'Stale',
+    scout:'EVIDENCE SCOUT · VARELYX SIGNATURE',
+    scoutTitle:'The missing fact most likely to change the decision',
+    why:'WHY THIS MATTERS',
+    whyText:'This is the current decision bottleneck: resolving it can materially change the feasible response under the controlled sensitivity model.',
+    capacityLabel:'Operator-confirmed Supplier B Thursday capacity',
+    reviewConfirm:'Review & confirm',
+    confirmationHint:'Confirmation is human input. Gemini may surface evidence, but it does not authorize executable quantities.',
+    decideEyebrow:'03 · DECIDE',
+    decideTitle:'Compare the trade-offs before committing.',
+    decideIntro:'Deterministic planning owns quantities; Gemini never creates executable order amounts.',
+    selectedProof:'SELECTED FOR PROOF',
+    balanced:'Balanced demo candidate',
+    alternatives:'ALTERNATIVES',
+    matrixTradeoff:'TRADE-OFF MATRIX',
+    sameAssumptions:'Same controlled assumptions',
+    proofEyebrow:'04 · PROVE',
+    proofTitle:'Make unsafe decisions impossible to miss.',
+    proofIntro:'The Proof Gate checks the selected deterministic plan against encoded operational constraints.',
+    verification:'DECISION VERIFICATION',
+    proveCandidate:'Prove balanced candidate',
+    unsafe:'Test unsafe proposal',
+    proofOutcome:'PROOF OUTCOME',
+    copyReceipt:'Copy proof receipt',
+    actEyebrow:'05 · ACT',
+    actTitle:'Human authorization is the execution boundary.',
+    actIntro:'AI analysis and deterministic proof can prepare a response; only the operator can authorize sandbox action records.',
+    humanApproval:'HUMAN APPROVAL REQUIRED',
+    approveTitle:'Approve only the currently proven decision.',
+    approveSandbox:'Approve sandbox actions',
+    actionLedger:'SANDBOX ACTION LEDGER',
+    exportJson:'Export QA evidence JSON',
+    auditEyebrow:'06 · AUDIT',
+    auditTitle:'Every decision leaves a trail.',
+    auditIntro:'Only events that actually occurred are shown as completed in the live timeline.',
+    footer:'Competition prototype · controlled simulation · human-in-the-loop'
+  },
+  bn: {
+    language:'ভাষা',
+    topKicker:'লাইভ সিদ্ধান্ত কর্মক্ষেত্র',
+    topScenario:'বাংলাদেশ কনটিনিউটি সিনারিও',
+    firebaseConnecting:'Firebase সংযোগ হচ্ছে',
+    firebaseReady:'Firebase প্রস্তুত',
+    aiConnecting:'AI সংযোগ হচ্ছে',
+    aiReady:'AI প্রস্তুত',
+    aiVerified:'AI যাচাইকৃত',
+    waitingAnalysis:'বিশ্লেষণের অপেক্ষায়',
+    reviewRequired:'রিভিউ প্রয়োজন',
+    evidenceReviewed:'এভিডেন্স রিভিউ সম্পন্ন',
+    proofPending:'প্রুফ বাকি',
+    proofPass:'প্রুফ PASS',
+    proofBlock:'প্রুফ BLOCK',
+    proofStale:'প্রুফ পুরোনো',
+    savePending:'সেভ বাকি',
+    saveVerified:'সেভ যাচাইকৃত',
+    readyHelp:'সব সংযুক্ত আছে। সাপ্লায়ার সিগন্যাল বিশ্লেষণ করে শুরু করুন।',
+    reviewHelp:'AI বিশ্লেষণ শেষ। সিদ্ধান্তের আগে পাওয়া তথ্য রিভিউ করুন।',
+    proofHelp:'এভিডেন্স রিভিউ হয়েছে। নির্বাচিত পরিকল্পনায় Proof Gate চালান।',
+    approvalHelp:'Proof PASS করেছে। sandbox action সেভ করার আগে মানুষের অনুমোদন প্রয়োজন।',
+    savedHelp:'সিদ্ধান্ত Firebase-এ সেভ হয়েছে এবং যাচাই করা হয়েছে।',
+    incidentKicker:'রিটেইল বিঘ্ন সিদ্ধান্ত কর্মক্ষেত্র',
+    controlled:'নিয়ন্ত্রিত সিমুলেশন',
+    analyze:'বিঘ্ন বিশ্লেষণ করুন',
+    inspect:'এভিডেন্স দেখুন',
+    reset:'ডেমো রিসেট',
+    decisionState:'সিদ্ধান্তের অবস্থা',
+    unresolved:'অসম্পূর্ণ এভিডেন্স',
+    nextAction:'পরবর্তী সেরা পদক্ষেপ',
+    stageSignal:'সিগন্যাল',
+    stageSignalSub:'বিঘ্ন পাওয়া গেছে',
+    stageEvidence:'এভিডেন্স',
+    stageEvidenceSub:'জানা বনাম অজানা',
+    stageDecision:'সিদ্ধান্ত',
+    stageDecisionSub:'ট্রেড-অফ হিসাব করা',
+    stageProof:'প্রুফ',
+    stageProofSub:'শর্ত যাচাই',
+    stageAction:'অ্যাকশন',
+    stageActionSub:'মানব অনুমোদন',
+    evidenceEyebrow:'02 · জানুন + জিজ্ঞাসা করুন',
+    evidenceTitle:'সিদ্ধান্তের আগে বিঘ্নটি যাচাই করুন।',
+    evidenceIntro:'সিগন্যাল, উৎস, অনিশ্চয়তা এবং সিদ্ধান্তের জন্য জরুরি অনুপস্থিত তথ্য এক জায়গায় দেখুন।',
+    incoming:'ইনকামিং সিগন্যাল',
+    supplierEvidence:'সাপ্লায়ার / অপারেশন এভিডেন্স',
+    analyzeSignal:'এই সিগন্যাল বিশ্লেষণ করুন',
+    matrix:'এভিডেন্স ম্যাট্রিক্স',
+    confirmed:'নিশ্চিত',
+    estimated:'আনুমানিক',
+    unknown:'অজানা',
+    stale:'পুরোনো',
+    scout:'এভিডেন্স স্কাউট · VARELYX',
+    scoutTitle:'যে অনুপস্থিত তথ্য সিদ্ধান্ত সবচেয়ে বেশি বদলাতে পারে',
+    why:'কেন এটি গুরুত্বপূর্ণ',
+    whyText:'এটাই বর্তমান সিদ্ধান্তের bottleneck: এটি জানা গেলে controlled sensitivity model-এর সম্ভাব্য response বদলাতে পারে।',
+    capacityLabel:'অপারেটর-নিশ্চিত Supplier B বৃহস্পতিবারের capacity',
+    reviewConfirm:'রিভিউ ও নিশ্চিত করুন',
+    confirmationHint:'Confirmation মানুষের ইনপুট। Gemini তথ্য খুঁজে দিতে পারে, কিন্তু executable quantity অনুমোদন করে না।',
+    decideEyebrow:'03 · সিদ্ধান্ত',
+    decideTitle:'কমিট করার আগে trade-off তুলনা করুন।',
+    decideIntro:'Quantity deterministic planning নির্ধারণ করে; Gemini executable order amount তৈরি করে না।',
+    selectedProof:'প্রুফের জন্য নির্বাচিত',
+    balanced:'Balanced demo candidate',
+    alternatives:'বিকল্পসমূহ',
+    matrixTradeoff:'ট্রেড-অফ ম্যাট্রিক্স',
+    sameAssumptions:'একই controlled assumptions',
+    proofEyebrow:'04 · প্রুফ',
+    proofTitle:'অনিরাপদ সিদ্ধান্ত যেন চোখ এড়িয়ে না যায়।',
+    proofIntro:'Proof Gate নির্বাচিত deterministic plan-কে operational constraint-এর বিপরীতে যাচাই করে।',
+    verification:'সিদ্ধান্ত যাচাই',
+    proveCandidate:'Balanced candidate যাচাই করুন',
+    unsafe:'Unsafe proposal পরীক্ষা করুন',
+    proofOutcome:'প্রুফ ফলাফল',
+    copyReceipt:'প্রুফ রিসিপ্ট কপি করুন',
+    actEyebrow:'05 · অ্যাকশন',
+    actTitle:'Execution-এর চূড়ান্ত সীমা হলো মানব অনুমোদন।',
+    actIntro:'AI analysis ও deterministic proof response প্রস্তুত করতে পারে; sandbox action কেবল operator অনুমোদন করতে পারেন।',
+    humanApproval:'মানব অনুমোদন প্রয়োজন',
+    approveTitle:'শুধু বর্তমানে proven সিদ্ধান্তটি অনুমোদন করুন।',
+    approveSandbox:'Sandbox action অনুমোদন করুন',
+    actionLedger:'SANDBOX ACTION LEDGER',
+    exportJson:'QA evidence JSON export করুন',
+    auditEyebrow:'06 · অডিট',
+    auditTitle:'প্রতিটি সিদ্ধান্তের trail থাকে।',
+    auditIntro:'লাইভ timeline-এ শুধু সত্যিই ঘটে যাওয়া event completed হিসেবে দেখানো হয়।',
+    footer:'Competition prototype · controlled simulation · human-in-the-loop'
+  }
+};
+
+let locale = 'en';
+
+export function detectInitialLocale() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'bn' || saved === 'en') return saved;
+  } catch {}
+  const languages = navigator.languages || [navigator.language || 'en'];
+  return languages.some(value => String(value).toLowerCase().startsWith('bn')) ? 'bn' : 'en';
+}
+
+export function setLocale(next) {
+  locale = next === 'bn' ? 'bn' : 'en';
+  document.documentElement.lang = locale;
+  try { localStorage.setItem(STORAGE_KEY, locale); } catch {}
+  applyTranslations();
+  document.dispatchEvent(new CustomEvent('varelyx:languagechange', {detail:{locale}}));
+}
+
+export function getLocale() { return locale; }
+export function t(key) { return translations[locale]?.[key] ?? translations.en[key] ?? key; }
+
+export function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const value = t(el.dataset.i18n);
+    if (value) el.textContent = value;
+  });
+  const select = document.querySelector('#languageSelect');
+  if (select) {
+    select.value = locale;
+    select.setAttribute('aria-label', t('language'));
+  }
+}
+
+export function initI18n() {
+  locale = detectInitialLocale();
+  applyTranslations();
+  const select = document.querySelector('#languageSelect');
+  if (select) select.addEventListener('change', event => setLocale(event.target.value));
+  document.documentElement.lang = locale;
+  return locale;
+}
