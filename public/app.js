@@ -47,11 +47,11 @@ function render() {
   const plans = vm.plans, balanced = plans.find(p=>p.id==='balanced'), ex = state.extraction;
   const stages = getStageState(vm);
 
-  chip('#cloudState', connected?'Firebase verified':'Firebase not verified', connected?'ok':'bad');
-  chip('#geminiState', state.liveVerified?'Gemini live verified':'Gemini not run', state.liveVerified?'ai':'neutral');
-  chip('#reviewState', state.evidenceReviewed?'Evidence reviewed':'Review required', state.evidenceReviewed?'ok':'warn');
-  chip('#proofState', vm.system.proof==='PASS'?'Proof PASS':vm.system.proof==='BLOCK'?'Proof BLOCK':vm.system.proof==='STALE'?'Proof stale':'Proof '+vm.system.proof.toLowerCase(), vm.system.proof==='PASS'?'ok':vm.system.proof==='BLOCK'?'bad':vm.system.proof==='STALE'?'warn':'neutral');
-  chip('#saveState', lastSave?.verified?'Save verified':'Save not verified', lastSave?.verified?'ok':'neutral');
+  chip('#cloudState', connected?'Firebase Ready':'Firebase connecting', connected?'ok':'neutral');
+  chip('#geminiState', state.liveVerified?'AI Verified':connected?'AI Ready':'AI connecting', state.liveVerified?'ai':connected?'ok':'neutral');
+  chip('#reviewState', state.evidenceReviewed?'Evidence reviewed':state.liveVerified?'Review required':'Waiting for analysis', state.evidenceReviewed?'ok':state.liveVerified?'warn':'neutral');
+  chip('#proofState', state.proof?.status==='PASS'?'Proof PASS':state.proof?.status==='BLOCK'?'Proof BLOCK':vm.system.proof==='STALE'?'Proof stale':'Proof pending', state.proof?.status==='PASS'?'ok':state.proof?.status==='BLOCK'?'bad':vm.system.proof==='STALE'?'warn':'neutral');
+  chip('#saveState', lastSave?.verified?'Save verified':'Save pending', lastSave?.verified?'ok':'neutral');
 
   document.querySelectorAll('[data-stage]').forEach(el=>{const value=stages[el.dataset.stage];el.className='stage '+value;el.setAttribute('aria-current',value==='active'?'step':'false');});
 
