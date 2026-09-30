@@ -40,7 +40,12 @@
         </div>
       </section>
       <section id="setupWarning" class="panel warning hidden"><b>Firebase setup required</b><p>Check Anonymous Authentication, Realtime Database, Firebase AI Logic and App Check configuration for this domain.</p></section>
-      <section id="statusHelper" class="status-helper panel" aria-live="polite">Everything is connected. Start by analyzing the supplier signal.</section>
+      <section id="statusHelper" class="status-helper panel" aria-live="polite"><span id="statusHelperText">Everything is connected. Start by analyzing the supplier signal.</span><a id="nextStepBtn" class="button secondary status-next" href="#evidenceWorkspace">Go to next step</a></section>
+      <section class="onboarding-strip" aria-label="How Varelyx works">
+        <div><span>1</span><b data-i18n="guideSignal">Add the supplier signal</b></div>
+        <div><span>2</span><b data-i18n="guideReview">Review the evidence</b></div>
+        <div><span>3</span><b data-i18n="guideProve">Prove, approve and save</b></div>
+      </section>
       <section id="persistenceStatus" class="status-banner panel" role="status" aria-live="polite">Connecting to verified Firebase persistence…</section>
       <section class="stage-rail" aria-label="Decision stages"><div class="stage active" data-stage="signal"><span>1</span><div><b data-i18n="stageSignal">Signal</b><small data-i18n="stageSignalSub">Disruption received</small></div></div><div class="stage" data-stage="evidence"><span>2</span><div><b data-i18n="stageEvidence">Evidence</b><small data-i18n="stageEvidenceSub">Known vs unknown</small></div></div><div class="stage" data-stage="decision"><span>3</span><div><b data-i18n="stageDecision">Decision</b><small data-i18n="stageDecisionSub">Trade-offs computed</small></div></div><div class="stage" data-stage="proof"><span>4</span><div><b data-i18n="stageProof">Proof</b><small data-i18n="stageProofSub">Constraints verified</small></div></div><div class="stage" data-stage="action"><span>5</span><div><b data-i18n="stageAction">Action</b><small data-i18n="stageActionSub">Human approval</small></div></div></section>
       <section class="metrics" id="metrics" aria-label="Decision metrics"></section>
@@ -102,7 +107,7 @@
           <article id="approvalSummary" class="panel approval-panel">
             <div class="approval-icon">H</div><div><span class="panel-label" data-i18n="humanApproval">HUMAN APPROVAL REQUIRED</span><h3 data-i18n="approveTitle">Approve only the currently proven decision.</h3><p>No supplier, ERP, WMS or external purchasing system is contacted by this prototype.</p></div>
             <div id="approvalNumbers" class="approval-numbers"></div>
-            <button id="approveBtn" class="primary xl" data-i18n="approveSandbox">Approve sandbox actions</button>
+            <button id="approveBtn" class="primary xl" data-i18n="approveSandbox">Approve sandbox actions</button><p id="approvalReason" class="approval-reason" aria-live="polite"></p>
           </article>
           <article id="actionLedger" class="panel action-ledger"><div class="panel-topline"><span class="panel-label" data-i18n="actionLedger">SANDBOX ACTION LEDGER</span><span class="sandbox-badge">APPROVED_SANDBOX only</span></div><div id="actions"><p class="hint">No verified saved actions yet.</p></div><button id="exportBtn" class="button secondary" data-i18n="exportJson">Export QA evidence JSON</button></article>
         </div>
