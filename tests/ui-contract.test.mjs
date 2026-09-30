@@ -56,7 +56,7 @@ test('small-screen layout contains page overflow and keeps local comparison scro
   assert.match(css,/\.action-card[^}]*overflow-wrap:anywhere/);
 });
 
-test('unanalyzed unresolved evidence is not rendered as a fake number',()=>assert.match(app,/Not assessed/));
+test('unanalyzed unresolved evidence is not rendered as a fake number',()=>assert.match(i18n,/notAssessed:'Not assessed'/));
 
 test('system status uses customer-friendly readiness language',()=> {
   for (const label of ['AI connecting','Waiting for analysis','Proof pending','Save pending']) assert.match(html,new RegExp(label));
@@ -75,7 +75,7 @@ test('bilingual UI exposes English and Bangla switcher',()=> {
 });
 
 test('usability polish exposes next-step guidance and approval lock reason',()=> {
-  for (const id of ['statusHelperText','nextStepBtn','approvalReason']) assert.match(html,new RegExp('id=["\\']'+id+'["\\']'));
+  for (const id of ['statusHelperText','nextStepBtn','approvalReason']) assert.match(html,new RegExp('id=["\\\\\']'+id+'["\\\\\']'));
   assert.match(html,/class="onboarding-strip"/);
   assert.match(i18n,/approvalBlocked/);
   assert.match(i18n,/guideSignal/);
