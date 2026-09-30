@@ -73,3 +73,11 @@ test('bilingual UI exposes English and Bangla switcher',()=> {
   assert.match(i18n,/localStorage\.setItem\(STORAGE_KEY/);
   assert.match(app,/varelyx:languagechange/);
 });
+
+test('usability polish exposes next-step guidance and approval lock reason',()=> {
+  for (const id of ['statusHelperText','nextStepBtn','approvalReason']) assert.match(html,new RegExp('id=["\\']'+id+'["\\']'));
+  assert.match(html,/class="onboarding-strip"/);
+  assert.match(i18n,/approvalBlocked/);
+  assert.match(i18n,/guideSignal/);
+  assert.match(css,/\.approval-reason/);
+});
