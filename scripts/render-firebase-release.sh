@@ -60,13 +60,37 @@ fi
 
 echo "=== REGISTER PRIVATE CI APP CHECK TOKEN ==="
 DEBUG_TOKEN="$(node -e "process.stdout.write(require('node:crypto').randomUUID())")"
+set +e
 npx --yes firebase-tools@latest appcheck:debugtokens:create "$DEBUG_TOKEN" \
   --app "$FIREBASE_APP_ID" \
   --display-name "Render Release QA" \
   --force \
   --project "$PROJECT_ID" \
   --non-interactive \
-  --json > /tmp/appcheck-debug-registration.json
+  --json > /tmp/appcheck-debug-registration.json 2>&1
+APP_CHECK_STATUS=$?
+set -e
+if [ "$APP_CHECK_STATUS" -ne 0 ]; then
+  echo "App Check debug-token registration failed."
+  python3 - <<'PY'
+import json
+from pathlib import Path
+p=Path('/tmp/appcheck-debug-registration.json')
+text=p.read_text(errors='replace') if p.exists() else ''
+try:
+    data=json.loads(text)
+    err=data.get('error', data)
+    if isinstance(err, dict):
+        print('code:', err.get('status') or err.get('code') or 'unknown')
+        print('message:', err.get('message') or 'unknown')
+    else:
+        print(str(err)[:1200])
+except Exception:
+    safe='\n'.join(line for line in text.splitlines() if 'Token:' not in line and 'debugToken' not in line)
+    print(safe[:1200])
+PY
+  exit "$APP_CHECK_STATUS"
+fi
 export FIREBASE_APPCHECK_DEBUG_TOKEN="$DEBUG_TOKEN"
 
 echo "=== INSTALL BROWSER ==="
