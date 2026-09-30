@@ -3,6 +3,7 @@ set -euo pipefail
 
 PROJECT_ID="${FIREBASE_PROJECT_ID:-varelyx-ai-builder-cup}"
 PRODUCTION_URL="${PRODUCTION_URL:-https://varelyx-ai-builder-cup.web.app}"
+FIREBASE_APP_ID="${FIREBASE_APP_ID:-1:32966208347:web:1bef3397bac296973b087e}"
 CREDENTIAL_JSON="${GCP_SERVICE_ACCOUNT_JSON:-}"
 
 if [ -z "$CREDENTIAL_JSON" ]; then
@@ -11,7 +12,7 @@ if [ -z "$CREDENTIAL_JSON" ]; then
 fi
 
 cleanup() {
-  rm -f /tmp/varelyx-gcp-key.json
+  rm -f /tmp/varelyx-gcp-key.json /tmp/appcheck-debug-registration.json
 }
 trap cleanup EXIT
 
@@ -35,7 +36,10 @@ else
 fi
 
 echo "=== DEPLOY FIREBASE HOSTING ==="
-npx --yes firebase-tools@latest deploy   --only hosting   --project "$PROJECT_ID"   --non-interactive
+npx --yes firebase-tools@latest deploy \
+  --only hosting \
+  --project "$PROJECT_ID" \
+  --non-interactive
 
 echo "=== WAIT FOR OFFICIAL HOST TO SERVE LATEST UI ==="
 ready=0
@@ -54,11 +58,25 @@ if [ "$ready" -ne 1 ]; then
   exit 1
 fi
 
+echo "=== REGISTER PRIVATE CI APP CHECK TOKEN ==="
+DEBUG_TOKEN="$(node -e "process.stdout.write(require('node:crypto').randomUUID())")"
+npx --yes firebase-tools@latest appcheck:debugtokens:create "$DEBUG_TOKEN" \
+  --app "$FIREBASE_APP_ID" \
+  --display-name "Render Release QA" \
+  --force \
+  --project "$PROJECT_ID" \
+  --non-interactive \
+  --json > /tmp/appcheck-debug-registration.json
+export FIREBASE_APPCHECK_DEBUG_TOKEN="$DEBUG_TOKEN"
+
 echo "=== INSTALL BROWSER ==="
 npx playwright install chromium
 
 echo "=== LIVE PRODUCTION QA ==="
-LIVE_JUDGE_FLOW=1 EVIDENCE_CAPTURE=1 BASE_URL="$PRODUCTION_URL" npm run test:e2e
+LIVE_JUDGE_FLOW=1 \
+EVIDENCE_CAPTURE=1 \
+BASE_URL="$PRODUCTION_URL" \
+npm run test:e2e -- --workers=1
 
 echo "=== SUCCESS: FIREBASE RELEASE VERIFIED ==="
 echo "Project: $PROJECT_ID"
