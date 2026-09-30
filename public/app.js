@@ -5,6 +5,7 @@ import {VerifiedSession, deadline} from './session.mjs';
 import {createRestTransport} from './firebase-transport.mjs';
 import {buildViewModel, getStageState} from './ui-state.mjs';
 import {createAnalyticsAdapter} from './analytics.mjs';
+import {initI18n, t} from './i18n.mjs';
 
 const $ = s => document.querySelector(s);
 const escape = value => String(value ?? 'Unknown').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
@@ -15,6 +16,7 @@ const exporter = $('#exportBtn');
 const copyReceiptBtn = $('#copyReceiptBtn');
 const analytics = createAnalyticsAdapter(globalThis.posthog ?? null);
 const SANDBOX_STATUS = 'APPROVED_SANDBOX';
+initI18n();
 analytics.capture('demo_session_started',{mode:'controlled_simulation'});
 
 function message(text, error = false) {
@@ -47,11 +49,13 @@ function render() {
   const plans = vm.plans, balanced = plans.find(p=>p.id==='balanced'), ex = state.extraction;
   const stages = getStageState(vm);
 
-  chip('#cloudState', connected?'Firebase Ready':'Firebase connecting', connected?'ok':'neutral');
-  chip('#geminiState', state.liveVerified?'AI Verified':connected?'AI Ready':'AI connecting', state.liveVerified?'ai':connected?'ok':'neutral');
-  chip('#reviewState', state.evidenceReviewed?'Evidence reviewed':state.liveVerified?'Review required':'Waiting for analysis', state.evidenceReviewed?'ok':state.liveVerified?'warn':'neutral');
-  chip('#proofState', state.proof?.status==='PASS'?'Proof PASS':state.proof?.status==='BLOCK'?'Proof BLOCK':vm.system.proof==='STALE'?'Proof stale':'Proof pending', state.proof?.status==='PASS'?'ok':state.proof?.status==='BLOCK'?'bad':vm.system.proof==='STALE'?'warn':'neutral');
-  chip('#saveState', lastSave?.verified?'Save verified':'Save pending', lastSave?.verified?'ok':'neutral');
+  chip('#cloudState', connected?t('firebaseReady'):t('firebaseConnecting'), connected?'ok':'neutral');
+  chip('#geminiState', state.liveVerified?t('aiVerified'):connected?t('aiReady'):t('aiConnecting'), state.liveVerified?'ai':connected?'ok':'neutral');
+  chip('#reviewState', state.evidenceReviewed?t('evidenceReviewed'):state.liveVerified?t('reviewRequired'):t('waitingAnalysis'), state.evidenceReviewed?'ok':state.liveVerified?'warn':'neutral');
+  chip('#proofState', state.proof?.status==='PASS'?t('proofPass'):state.proof?.status==='BLOCK'?t('proofBlock'):vm.system.proof==='STALE'?t('proofStale'):t('proofPending'), state.proof?.status==='PASS'?'ok':state.proof?.status==='BLOCK'?'bad':vm.system.proof==='STALE'?'warn':'neutral');
+  chip('#saveState', lastSave?.verified?t('saveVerified'):t('savePending'), lastSave?.verified?'ok':'neutral');
+  const helper=$('#statusHelper');
+  if(helper) helper.textContent = lastSave?.verified?t('savedHelp'):state.proof?.status==='PASS'?t('approvalHelp'):state.evidenceReviewed?t('proofHelp'):state.liveVerified?t('reviewHelp'):t('readyHelp');
 
   document.querySelectorAll('[data-stage]').forEach(el=>{const value=stages[el.dataset.stage];el.className='stage '+value;el.setAttribute('aria-current',value==='active'?'step':'false');});
 
@@ -109,6 +113,7 @@ $('#analyzeEvidenceBtn').onclick=analyzeCurrentSignal;
 $('#answerBtn').onclick=()=>operation(async()=>{const cap=capacityInput($('#capacityInput').value);if(!state.extraction)throw Error('Analyze with live Gemini first');if(!window.confirm('Review supplier, delay, route count and source quotations. Confirm Supplier B Thursday capacity = '+cap+' cases? Controlled simulation only.'))return;await save(confirmEvidence(state,cap));analytics.capture('evidence_reviewed',{confirmedCapacity:cap});analytics.capture('decision_ready',{affectedRoutes:state.extraction?.affected_routes??-1});});
 document.querySelectorAll('[data-proof]').forEach(b=>{b.onclick=()=>operation(async()=>{const plan=b.dataset.proof==='unverified-aggressive'?unsafePlan():plansFor(state).find(p=>p.id==='balanced');const proof=await prove(plan,state);analytics.capture(proof.status==='PASS'?'proof_passed':'proof_blocked',{strategy:plan.id});await save({...state,proof,phase:proof.status});});});
 $('#disruptionInput').addEventListener('input',render);
+document.addEventListener('varelyx:languagechange', render);
 $('#approveBtn').onclick=()=>operation(async()=>{if($('#disruptionInput').value.trim()!==state.source)throw Error('Analyze the edited message before approving');const plan=plansFor(state).find(p=>p.id==='balanced');const summary='Approve sandbox records for the proven balanced candidate?\n\nTransfer: '+plan.transfer_cases+'\nSupplier B: '+plan.supplier_b_cases+'\nEmergency: '+plan.emergency_cases+'\nCash: BDT '+plan.cash_required_bdt+'\n\nNo external supplier, ERP or purchasing system will be contacted.';if(!window.confirm(summary))return;analytics.capture('approval_attempted',{strategy:'balanced'});await save(await prepareApproval(state));});
 $('#resetBtn').onclick=()=>operation(async()=>{if(!window.confirm('Reset the controlled scenario? Existing sandbox action records will be archived.'))return;const next=initialState();next.archive=[...state.archive,...state.actions];next.receipts=state.receipts;if(next.archive.length>1000)throw Error('Archive limit reached. Export QA evidence before starting another session.');await save(next);});
 copyReceiptBtn.onclick=async()=>{if(!state.proof?.receipt_hash)return;try{await navigator.clipboard.writeText(state.proof.receipt_hash);message('Proof receipt copied to clipboard.');}catch{message('Could not copy receipt automatically. Use the visible SHA-256 receipt instead.',true);}};
