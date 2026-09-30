@@ -33,3 +33,17 @@ test('Decision Command Center renders safely without page-level overflow', async
   expect(overflow, `page-level horizontal overflow at ${testInfo.project.name}`).toBeLessThanOrEqual(1);
   expect(browserErrors).toEqual([]);
 });
+
+test('language can switch to Bangla and persists on reload', async ({page}) => {
+  await waitForLatestUi(page);
+  const selector = page.locator('#languageSelect');
+  await expect(selector).toBeVisible();
+  await selector.selectOption('bn');
+  await expect(page.locator('html')).toHaveAttribute('lang','bn');
+  await expect(page.getByText('বিঘ্ন বিশ্লেষণ করুন',{exact:true})).toBeVisible();
+  await page.reload({waitUntil:'domcontentloaded'});
+  await expect(page.locator('html')).toHaveAttribute('lang','bn');
+  await expect(selector).toHaveValue('bn');
+  await selector.selectOption('en');
+  await expect(page.getByText('Analyze disruption',{exact:true})).toBeVisible();
+});
