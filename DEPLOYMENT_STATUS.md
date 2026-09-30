@@ -2,63 +2,68 @@
 
 Last updated: 2026-09-30
 
-## Live infrastructure
+## Official production
 
 - Firebase project: `varelyx-ai-builder-cup`
 - Official Hosting URL: https://varelyx-ai-builder-cup.web.app
+- Final merged main commit verified: `cedcd678eb8a3caeb043aeb8a9d27d8e95ab041e`
 - Realtime Database rules: deployed
-- Region: `asia-southeast1`
 - Firebase Anonymous Authentication: enabled
-- Firebase AI Logic: enabled
-- Firebase App Check: registered with reCAPTCHA Enterprise
-- Render preview: https://varelyx-preview-qa.onrender.com
-- Render browser QA: https://varelyx-browser-qa.onrender.com
-- Dedicated official-Firebase live QA service: configured
+- Firebase AI Logic / Gemini: enabled
+- Firebase App Check: enabled with reCAPTCHA Enterprise
+- Production release controller: `varelyx-firebase-release-controller`
 
-## Verified on the latest product branch
+## Final technical release gate
 
-- Render exact-branch preview auto-deploy is live.
-- Node/source verification gate is green on Render.
-- Browser smoke is green at 1440x900, 1280x720 and 390x844.
-- Controlled-simulation disclosure is visible in the judge-facing incident surface.
-- Negative unit/transport proofs cover:
-  - permission denied -> save NOT VERIFIED;
-  - network failure -> NOT VERIFIED + reload reconciliation;
-  - read-back mismatch -> no success claim;
-  - concurrent revision conflict -> overwrite blocked;
-  - separate anonymous UIDs -> separate RTDB paths.
-- Preview-domain App Check blocks real Firebase/Gemini access on Render, so the Render preview is intentionally UI/browser QA only.
+Verified from the merged `main` commit through the Render release controller:
 
-## Current production gate
+- Node/source verification: **85/85 passed**
+- Python reference verification: **13/13 passed**
+- Firebase Hosting deploy: **passed**
+- Official host served the latest Decision Command Center
+- App Check CI registration: **passed**
+- Live production Playwright QA: **7 passed, 2 intentionally skipped, 0 failed**
+- Release log ended with **FIREBASE RELEASE VERIFIED**
 
-The official Firebase URL still serves the older production build. Dedicated official-Firebase Playwright QA cannot find the new Decision Command Center (`#commandCenter`), so the latest product branch has **not** been deployed to production yet.
-
-Do not merge/release PR #1 until the latest branch is deployed to official Firebase with an authorized deploy identity and the live gate below passes.
-
-## Required live production proof
-
+The live judge flow proved:
 1. Firebase server read verified.
 2. Real Gemini analysis -> **LIVE GEMINI VERIFIED**.
-3. Missing evidence -> HOLD.
-4. Supplier B capacity 120 reviewed by human operator.
-5. Balanced candidate -> PASS.
-6. Unsafe proposal -> BLOCK.
-7. Balanced candidate -> PASS again.
-8. Human approval -> sandbox actions only.
+3. Missing evidence -> **HOLD**.
+4. Human-reviewed supplier capacity resolves the critical unknown.
+5. Balanced candidate -> **PASS**.
+6. Unsafe candidate -> **BLOCK**.
+7. Balanced candidate -> **PASS** again.
+8. Human approval creates sandbox-only actions.
 9. Firebase write/read-back -> **FIREBASE SAVE VERIFIED**.
-10. Reload -> server state/actions restored.
-11. Deliberate write/network failure -> **NOT VERIFIED**.
-12. Concurrent session/tab conflict blocks stale overwrite.
-13. Anonymous-user data remains UID-isolated.
-14. Controlled-simulation labels remain visible.
+10. Reload restores server state/actions.
 
-## Competition completion status
+Negative persistence/transport tests cover permission denied, network failure, read-back mismatch, concurrent revision conflict, timeout, missing ETag and anonymous UID isolation.
 
-Technical implementation is close, but overall submission is not complete until:
-- latest product branch is deployed to official Firebase;
-- live production proof above passes;
-- eligible 2-4 person team is confirmed;
-- <=3-minute public demo video is ready;
-- final proposal/PDF claims match observed live behavior;
-- exact portal category/problem is confirmed;
-- final portal submission is accepted before the deadline.
+## Render service interpretation
+
+Authoritative release gate:
+- `varelyx-firebase-release-controller`
+
+Supporting preview gates:
+- `varelyx-preview-qa`
+- `varelyx-browser-qa`
+
+Legacy services `varelyx-firebase-live-qa` and `varelyx-firebase-postrelease-qa` may still display historical failed-deploy badges. They are not the authoritative final release gate and should not be used to judge current production health.
+
+## Technical status
+
+**Coding/release phase: complete.**
+
+PR #1 was merged to `main`; the merged main commit was deployed to official Firebase and the final production verification gate passed.
+
+## Remaining work is submission-side only
+
+- final judge-flow browser walkthrough / presentation QA
+- final <=3-minute public demo video
+- final proposal/PDF claims reconciled to observed behavior
+- public repo/demo links as required by the competition
+- eligible 2-4 person team and profile/activity/eligibility checks
+- logged-out testing of every submitted link
+- portal fields, final submission and saved receipt/confirmation
+
+Do not claim the competition submission itself is complete until those submission gates are closed.
