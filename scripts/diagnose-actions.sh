@@ -18,7 +18,7 @@ gh run list --repo "$REPO" --limit 12
 echo "=== release-gate run jobs ==="
 for run_id in 36603710225 36602990664; do
   echo "--- run $run_id ---"
-  gh api "repos/$REPO/actions/runs/$run_id/jobs"     --jq '.jobs[] | {id,name,status,conclusion,runner_name,runner_group_name,steps}'
+  gh api "repos/$REPO/actions/runs/$run_id/jobs" --jq '.jobs[] | {id,name,status,conclusion,runner_name,runner_group_name,steps}'
 done
 
 cat <<'EOF'

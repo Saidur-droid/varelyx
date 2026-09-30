@@ -55,9 +55,17 @@ def test_integrity_guardrails_are_locked():
 
 
 def test_static_firebase_submission_assets_exist():
-    for p in ["firebase.json","database.rules.json","public/index.html","public/app.js","public/firebase-config.js"]:
-        assert (ROOT / p).exists()
+    for path in ["firebase.json", "database.rules.json", "public/index.html",
+                 "public/app.js", "public/firebase-config.js", "public/core.mjs",
+                 "public/session.mjs", "public/firebase-transport.mjs"]:
+        assert (ROOT / path).exists()
     app = (ROOT / "public/app.js").read_text()
+    core = (ROOT / "public/core.mjs").read_text()
+    transport = (ROOT / "public/firebase-transport.mjs").read_text()
     assert "GoogleAIBackend" in app
-    assert "gemini-3.5-flash-lite" in app
-    assert "firebase-database.js" in app
+    assert "gemini-3.5-flash-lite" in core
+    assert "VerifiedSession" in app
+    assert "createRestTransport" in app
+    assert "X-Firebase-AppCheck" in transport
+    assert "if-match" in transport
+    # Functional persistence/constraint tests run in tests/web.test.mjs.

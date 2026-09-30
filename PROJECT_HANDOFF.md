@@ -1,166 +1,121 @@
 # Varelyx - Project Handoff / Single Source of Truth
 
-**Last updated:** 2026-09-27  
-**Competition:** Google Cloud AI Builder Cup 2026, powered by Hack2skill  
-**Theme:** Retail & Commerce - Intelligent Customer and Business Experiences  
-**Live app:** https://varelyx-ai-builder-cup.web.app  
-**Firebase project:** `varelyx-ai-builder-cup`
+Last updated: 2026-09-29
+Competition: Google Cloud AI Builder Cup 2026, powered by Hack2skill
+Theme: Retail & Commerce - Intelligent Customer and Business Experiences
+Firebase project: `varelyx-ai-builder-cup`
+Production URL recorded in the prior deployment handoff: https://varelyx-ai-builder-cup.web.app
 
-> Read this file first in every future work session. It is the durable status/next-step handoff.
+## Read this first
 
-## North-star product
+The reliability implementation and premium decision-workspace redesign are on `fix/firebase-verification-20260929`. They are not certified as deployed or production-ready. Read `docs/FIREBASE_FIX_REPORT_2026-09-29.md`, `docs/superpowers/specs/2026-09-29-premium-decision-workspace-design.md`, `docs/superpowers/plans/2026-09-29-decision-command-center-uiux.md`, and `docs/PREVIEW_REVIEW_CHECKLIST.md`.
 
-Varelyx is an evidence-driven retail continuity system:
+Do not treat the existing `NEXT_STEPS.md`, `DEPLOYMENT_STATUS.md` or prepared submission copy as evidence that the new branch has passed live QA.
 
-**KNOW -> ASK -> PROVE -> ACT**
+## Product and non-negotiable goals
 
-Gemini interprets messy disruption evidence and identifies the most decision-critical unknown. Deterministic logic owns operational quantities and hard constraints. The Proof Gate can PASS/HOLD/BLOCK. Human approval is required before execution-ready actions are persisted.
+KNOW -> ASK -> DECIDE -> PROVE -> ACT.
 
-## Competition goals
+Interpret disruption evidence, expose uncertainty, ask for decision-critical information, compute quantities deterministically, independently verify encoded constraints, and require human approval before storing sandbox action records.
 
-1. **Rule compliance:** never jeopardize eligibility or submission validity.
-2. **Top-tier product quality:** optimize the product and demo against the published judging criteria, especially meaningful GenAI implementation.
+Preserve eligibility/rule compliance and meaningful product/GenAI quality. Never claim real customers, pilots, revenue, observed retailer impact or external order dispatch without evidence. Simulation must remain clearly labelled.
 
-## Official rules snapshot - checked 2026-09-27
+## Existing infrastructure - recorded, not re-certified
 
-Current official AI Builder Cup pages state:
+The September 27 handoff recorded Hosting and Realtime Database rules deployed, Anonymous Auth and Firebase AI Logic enabled, and App Check registered with reCAPTCHA Enterprise. `public/firebase-config.js` already points to the intended project. Those account-side settings have not been independently re-verified in the September 29 work session.
 
-- Team formation: **2-4 members** by **2026-10-11**.
-- Participants: **21+**, based in **JAPAC**.
-- This edition is for **working professionals**; students are not eligible.
-- Prototype submission deadline: **2026-10-18**.
-- Prototype must meaningfully use Google AI such as Gemini/Gemma or an eligible agentic platform.
-- Prototype must be deployed on Google Cloud using Cloud Run/GCP/Firebase.
-- Submission requires a compelling proposal/deck converted to PDF, a functional deployed prototype, and a **3-minute** public demo link (YouTube/Vimeo/public Google Drive).
-- Submission materials must be in English.
-- Current judging weights:
-  - Technical Merit & Gen AI Implementation: **40%**
-  - Problem Alignment & Impact: **25%**
-  - Innovation & Creativity: **25%**
-  - User Experience & Solution Design: **10%**
+Primary path remains Firebase Hosting + Firebase AI Logic/Gemini + Anonymous Auth + Realtime Database. No billing upgrade or alternative hosting provider was introduced. The earlier FastAPI/OR-Tools/Cloud Run implementation remains an optional reference, not the current web runtime.
 
-Official sources:
-- https://aibuildercup.com/
-- https://aibuildercup.com/themes.html
+## Implemented on the reliability branch
 
-If the live competition portal or organizer publishes a newer requirement, the newest official requirement wins and this file must be updated.
+- Server-only, authenticated Firebase reads; revisioned ETag conditional writes; explicit write/read-back confirmation.
+- No operational localStorage fallback that could masquerade as cloud persistence.
+- JSON envelopes preserve empty arrays/null state; v2 does not silently trust legacy approvals.
+- Schema-constrained Gemini extraction, range/quote checks, human evidence review and stale-proof invalidation.
+- Extracted routes affect an explicitly disclosed controlled route-capacity policy.
+- Two-unknown sensitivity-based question ranking; not the complete general Evidence Scout.
+- Consistent Shadow Mode baseline of 290 expected shortage cases under the fixed demo scenarios.
+- Stronger quantity/cash/emergency/MOQ/route checks and reproducible full-plan SHA-256 receipts.
+- Receipt-linked sandbox action records, duplicate protection and evidence export.
+- Separate Node web tests added to CI; Python asset checks updated for modular files.
 
-## DONE
+## Premium decision-workspace redesign implemented on the branch
 
-### Product / infrastructure
-- [x] Retail & Commerce positioning locked.
-- [x] Firebase project created: `varelyx-ai-builder-cup`.
-- [x] Firebase Hosting configured and deployed.
-- [x] Public URL live: https://varelyx-ai-builder-cup.web.app
-- [x] Firebase Realtime Database configured in `asia-southeast1`.
-- [x] Database rules deployed successfully.
-- [x] Anonymous Firebase Authentication enabled.
-- [x] Firebase AI Logic configured.
-- [x] Gemini Developer API path configured.
-- [x] Firebase App Check registered with reCAPTCHA Enterprise.
-- [x] Windows one-command deploy helper fixed to run from the repository directory.
-- [x] Competition proposal deck/PDF prepared.
-- [x] Submission portal copy drafted.
-- [x] Final QA and submission-gate documents prepared.
+- Operations-first Decision Command Center with the Varelyx sequence **KNOW -> ASK -> DECIDE -> PROVE -> ACT**.
+- Persistent Firebase / Gemini / Evidence / Proof / Save status bar.
+- Signal + Evidence investigation workspace with Confirmed / Estimated / Unknown / Stale states, source-grounded evidence, and visible evidence freshness.
+- Evidence Scout promoted as the decision-critical missing-fact workflow.
+- DECIDE workspace with a non-superlative **Balanced demo candidate**, compact alternatives, and a direct trade-off matrix.
+- Signature Proof Gate presentation with PASS / HOLD / BLOCK, constraint details and copyable SHA-256 receipt.
+- Explicit AI analysis -> deterministic proof -> **human authorization** boundary, approval summary and sandbox-only action ledger.
+- Shadow Mode and chronological audit timeline.
+- Responsive 1440 / 1280 / 390 design contracts, visible keyboard focus, reduced-motion support and text-labelled status states.
+- Privacy-safe optional analytics adapter; analytics failure cannot block the judge flow and raw supplier evidence is stripped.
+- Existing Figma review file: https://www.figma.com/design/L96hoZxuZmi4I45jeP6Iqy . Final sync to the latest Decision Command Center was blocked by the Figma Starter-plan MCP call limit; GitHub is authoritative.
+- Production has NOT been overwritten. Firebase preview deployment is the next release gate.
 
-### Product behavior implemented/intended for final proof
-- Gemini disruption analysis.
-- Known / Estimated / Unknown evidence separation.
-- Critical missing-fact question.
-- Supplier-capacity confirmation.
-- Deterministic strategy recomputation.
-- Proof Gate PASS/BLOCK behavior.
-- Human approval.
-- Firebase persistence.
-- Controlled-simulation disclosure.
+## Verification actually obtained
 
-## CURRENT P0 - do these next
+Local reconstructed verification mirror results observed after the Decision Command Center work:
+- **77/77 Node tests passed** across reliability, UI-state, UI-contract and analytics suites.
+- **13/13 Python pytest tests passed** for the retained reference backend/rule checks.
+- All current public JS/MJS files passed `node --check`.
+- DOM scan: no duplicate IDs and no missing element IDs referenced by `app.js`.
+- CSS structural parse: balanced braces and no reported top-level parser errors.
 
-### P0.1 Live technical proof
-Open https://varelyx-ai-builder-cup.web.app and prove, in this order:
+These results verify the reconstructed test mirror, not a deployed Firebase environment. The authorized Windows device is currently offline, so an exact-checkout run on that machine remains a release gate.
 
-1. Firebase connected / Gemini ready.
-2. Click **Analyze disruption with Gemini**.
-3. Confirm **LIVE GEMINI VERIFIED**.
-4. Confirm Supplier B Thursday capacity = **120 cases**.
-5. Recompute strategies.
-6. Run balanced plan -> **PASS**.
-7. Run unsafe proposal -> **BLOCK**.
-8. Approve the verified plan.
-9. Confirm action objects are persisted.
-10. Refresh the browser and confirm state/actions remain.
+NOT verified: real Firebase writes on the redesigned preview, real Gemini inference on the redesigned preview, App Check preview-domain behavior, actual visual browser QA at 1440/1280/390, production deployment or final submission. Local headless Chromium did not complete in this execution environment. No live screenshot or video was fabricated.
 
-Capture screenshots of the important proof states. If any step fails, fixing it is the next engineering task; do not record the final video yet.
+The latest redesign PR run (GitHub Actions run **36595560628**) also completed as failure before reported job steps: both `web` and `test` jobs returned no runner and `steps: null`. This still does not establish a test assertion failure. Root cause remains unconfirmed.
 
-### P0.2 Eligibility / team
-Before **2026-10-11**:
-- Confirm **2-4 eligible real team members**.
-- Every member must satisfy the current official age/region/professional eligibility.
-- Ensure no ineligible student is on the team.
-- Complete team formation in the official portal.
+## Immediate P0 queue
 
-This requires real people and the entrant's account; it cannot be automated truthfully from the repository.
+1. Review the branch and obtain a successful GitHub CI run or diagnose the account/runner block.
+2. On an authorized machine, log in to Firebase and confirm access to the intended project; do not paste private credentials into chat.
+3. Deploy a Hosting preview, configure its Auth/App Check domains, and run the live QA in the implementation report.
+4. Prove actual Gemini -> reviewed evidence -> PASS/BLOCK/HOLD -> approval -> server-confirmed save -> reload restoration.
+5. Capture authentic screenshots and export QA JSON. Only after successful review/live QA merge and release to production.
+6. Verify the final proposal PDF against actual functionality, record and publish a public three-minute video, and test links signed out.
+7. Confirm eligible team members and final portal fields; submit and save confirmation.
 
-### P0.3 Public repository check
-Before final submission:
-- Confirm the repository visibility and source-code requirements shown in the live submission portal.
-- Remove secrets/private credentials before any visibility change.
-- Keep Firebase client configuration only where appropriate; never commit service-account/private keys.
+## Competition rules and dates
 
-### P0.4 Final demo video
-Only after P0.1 passes:
-- Record the live product, not a slide-only pitch.
-- Keep the final video within the official **3-minute** requirement.
-- Show: problem -> live Gemini -> missing evidence -> Proof Gate PASS -> unsafe BLOCK -> approval/persistence -> differentiation/scale.
-- Publish using an accepted public link.
-- Verify the link in an incognito/private browser.
+Official sources: https://aibuildercup.com/ and https://aibuildercup.com/themes.html .
 
-Use `docs/DEMO_VIDEO_SCRIPT.md`.
+The current public homepage lists teams of 2-4, team formation/registration through October 11, 2026, and prototype submission through October 18, 2026. The linked official Terms & Conditions also require teams of 2-4 but state that roster additions/replacements close October 4 and that those Terms prevail over inconsistent promotional material. Use **October 4 as the conservative roster-change cutoff** unless the organizer gives written clarification. Do not confuse the original internal October 3 target with the published prototype submission deadline.
 
-### P0.5 Final portal submission
-Before **2026-10-18**:
-- Upload proposal PDF.
-- Add deployed prototype URL.
-- Add repository URL as required by the portal.
-- Add public demo-video URL.
-- Select/confirm Retail & Commerce and the exact problem statement.
-- Paste the polished submission copy.
-- Complete declarations.
-- Submit.
-- Save the portal confirmation screenshot/email.
+Participants must be 21+, based in JAPAC and eligible working professionals. Students are not eligible. Use Google AI/eligible agentic tooling and deploy a working prototype on Google Cloud/Cloud Run/Firebase. Submission materials are English: proposal PDF, deployed prototype and public three-minute demo. Judging weights are technical/GenAI 40%, problem alignment/impact 25%, innovation 25%, UX/design 10%.
 
-## Definition of 100% DONE
+Confirm the exact Retail & Commerce statement in the portal; the themes page has inconsistent generic category examples. Check source-code visibility/access requirements before changing the private repository, and review credentials before any public release.
 
-Do **not** call the competition entry 100% complete until all are true:
+## Remaining full-product work
 
-- [ ] Live Gemini verified.
-- [ ] PASS/BLOCK verified.
-- [ ] Approval + persistence verified after refresh.
-- [ ] Eligible team finalized.
-- [ ] Public demo video published and link tested.
-- [ ] Proposal PDF final.
-- [ ] Portal fields complete.
-- [ ] Final submission accepted by the portal.
-- [ ] Confirmation evidence saved.
+Real sales/inventory ingestion driving forecasts, empirical forecasting benchmarks, general question ranking, realistic scenario generation, ADK orchestration, stronger server-authoritative enforcement, broader reliability testing and a real outcome ledger remain unfinished. Do not describe them as completed by this reliability patch.
 
-## Files to read next
+The client-side Proof Gate is not a trusted server attestation. A malicious user can alter their own demo records. Real purchasing needs server-side authorization and validation.
 
-1. `PROJECT_HANDOFF.md` - this file.
-2. `NEXT_STEPS.md` - immediate execution queue.
-3. `docs/FINAL_LIVE_QA.md` - technical smoke test.
-4. `docs/DEMO_VIDEO_SCRIPT.md` - recording script.
-5. `docs/SUBMISSION_PORTAL_COPY.md` - ready-to-paste copy.
-6. `docs/FINAL_SUBMISSION_GATE.md` - final stop/go gate.
-7. `DEPLOYMENT_STATUS.md` - deployment record.
-8. `COMPETITION_RULES_LOCK.md` - competition guardrails.
+## Submission assets and completion gate
 
-## Instructions for future ChatGPT/Codex sessions
+Earlier documentation reports a proposal deck/PDF prepared; their final files were not re-certified here. `docs/DEMO_VIDEO_SCRIPT.md` and `docs/SUBMISSION_PORTAL_COPY.md` remain starting points and must be reconciled with the v2 behavior and honest claims.
 
-When given this repository:
-- Read `PROJECT_HANDOFF.md` first.
-- Preserve the two competition goals: rule compliance and top-tier product quality.
-- Never claim a real pilot, customer, revenue, or observed impact without evidence.
-- Keep simulation values explicitly labelled as simulation.
-- Do not let Gemini directly invent operational quantities; deterministic constraints/Proof Gate own executable decisions.
-- Prioritize the P0 queue before adding unrelated features.
-- Update this handoff whenever a P0 item changes state.
+100% complete requires live Gemini proof, PASS/BLOCK proof, verified remote persistence after reload, eligible team, final PDF, tested public video link, completed portal fields, accepted submission and saved confirmation evidence. These final gates remain open.
+
+After submission, tag the accepted commit, save final materials offline and keep the deployment stable through evaluation.
+
+
+## PC-independent CI/CD
+
+Preferred execution is **GitHub Actions -> OIDC/WIF -> Firebase Hosting preview -> Playwright**. Codespaces provides Node 22, Python 3.12, GitHub CLI and Google Cloud CLI. Remote Desktop is a fallback only.
+
+Repo additions:
+- `.github/workflows/firebase-preview.yml`
+- `.devcontainer/devcontainer.json`
+- `playwright.config.mjs`
+- `tests/e2e/smoke.spec.mjs`
+- `scripts/extract-firebase-preview-url.mjs`
+- `docs/CLOUD_CI_SETUP.md`
+
+Important: historical GitHub Actions failures still show no runner and `steps: null`; that remains an account/repository runner/billing/policy issue until GitHub-hosted jobs actually start. Do not treat it as an app assertion failure.
+
+Production remains manually gated.
