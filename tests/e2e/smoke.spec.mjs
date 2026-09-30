@@ -1,13 +1,25 @@
 import {test, expect} from '@playwright/test';
 
+async function waitForLatestUi(page) {
+  const attempts = Number(process.env.PREVIEW_READY_ATTEMPTS || 18);
+  const delayMs = Number(process.env.PREVIEW_READY_DELAY_MS || 5000);
+  for (let i = 0; i < attempts; i += 1) {
+    await page.goto('/', {waitUntil:'domcontentloaded'});
+    if (await page.locator('#commandCenter').count()) return;
+    if (i < attempts - 1) await page.waitForTimeout(delayMs);
+  }
+  throw new Error('Latest Decision Command Center did not appear before preview readiness timeout');
+}
+
 test('Decision Command Center renders safely without page-level overflow', async ({page}, testInfo) => {
+  test.setTimeout(120_000);
   const browserErrors=[];
   page.on('pageerror', err => browserErrors.push(`pageerror: ${err.message}`));
   page.on('console', msg => {
     if (msg.type() === 'error' && /(?:Uncaught|ReferenceError|TypeError|SyntaxError)/i.test(msg.text())) browserErrors.push(`console: ${msg.text()}`);
   });
 
-  await page.goto('/', {waitUntil:'domcontentloaded'});
+  await waitForLatestUi(page);
   await expect(page.locator('#commandCenter')).toBeVisible();
   await expect(page.getByText('LIVE RETAIL CONTINUITY INCIDENT')).toBeVisible();
   for (const label of ['KNOW','ASK','DECIDE','PROVE','ACT']) await expect(page.getByText(label,{exact:true})).toBeVisible();
