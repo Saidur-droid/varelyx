@@ -45,5 +45,5 @@ test('language can switch to Bangla and persists on reload', async ({page}) => {
   await expect(page.locator('html')).toHaveAttribute('lang','bn');
   await expect(selector).toHaveValue('bn');
   await selector.selectOption('en');
-  await expect(page.getByText('Analyze disruption',{exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Analyze disruption',exact:true})).toBeVisible();
 });
