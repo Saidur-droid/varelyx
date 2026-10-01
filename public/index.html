@@ -39,7 +39,7 @@
           <article id="nextActionCard" class="command-card next-action"><span class="command-label" data-i18n="nextAction">Next best action</span><strong id="nextActionValue">Analyze disruption</strong><small id="nextActionDetail">Start with the live supplier signal.</small></article>
         </div>
       </section>
-      <section id="setupWarning" class="panel warning hidden"><b>Firebase setup required</b><p>Check Anonymous Authentication, Realtime Database, Firebase AI Logic and App Check configuration for this domain.</p></section>
+      <section id="setupWarning" class="panel warning hidden"><b id="setupWarningTitle">Firebase setup required</b><p id="setupWarningText">Check Anonymous Authentication, Realtime Database, Firebase AI Logic and App Check configuration for this domain.</p></section>
       <section id="statusHelper" class="status-helper panel" aria-live="polite"><span id="statusHelperText">Everything is connected. Start by analyzing the supplier signal.</span><a id="nextStepBtn" class="button secondary status-next" href="#evidenceWorkspace">Go to next step</a></section>
       <section class="onboarding-strip" aria-label="How Varelyx works">
         <div><span>1</span><b data-i18n="guideSignal">Add the supplier signal</b></div>
@@ -55,7 +55,7 @@
           <article id="signalPanel" class="panel signal-panel">
             <div class="panel-topline"><span class="panel-label" data-i18n="incoming">INCOMING SIGNAL</span><span id="evidenceFreshness" class="evidence-freshness">Stale until analyzed</span></div>
             <label for="disruptionInput" data-i18n="supplierEvidence">Supplier / operations evidence</label>
-            <textarea id="disruptionInput" rows="7">Eid er age Supplier B delivery 48 hours late. 2 routes affected. Thursday capacity ekhono confirm hoy nai.</textarea>
+            <textarea id="disruptionInput" rows="7">Supplier B has informed us that Thursday's scheduled delivery will arrive approximately 48 hours late due to a vehicle breakdown and warehouse congestion. The delay affects 2 distribution routes serving Dhaka North and Gazipur. Current stock is expected to cover only part of Thursday demand. Supplier B has not yet confirmed how many replacement cases can be supplied on Thursday. Operations should assess transfer, emergency supply, and cash constraints before any replenishment decision is approved.</textarea>
             <button id="analyzeEvidenceBtn" class="button secondary" type="button" data-i18n="analyzeSignal">Analyze this signal</button>
             <div id="geminiResult" class="resultBox" aria-live="polite"></div>
           </article>
