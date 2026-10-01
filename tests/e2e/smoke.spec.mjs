@@ -56,3 +56,14 @@ test('next-step helper and approval reason are visible', async ({page}) => {
   const href=await page.locator('#nextStepBtn').getAttribute('href');
   expect(href).toMatch(/^#/);
 });
+
+test('preview clearly identifies UI-only mode and uses current realistic scenario', async ({page}) => {
+  await waitForLatestUi(page);
+  await expect(page.locator('#disruptionInput')).toContainText('vehicle breakdown and warehouse congestion');
+  const host = new URL(page.url()).hostname;
+  if (host.endsWith('onrender.com')) {
+    await expect(page.locator('#setupWarningTitle')).toHaveText(/Preview environment/i);
+    await expect(page.locator('#persistenceStatus')).toContainText(/Preview mode/i);
+    await expect(page.locator('#setupWarning a')).toHaveAttribute('href','https://varelyx-ai-builder-cup.web.app');
+  }
+});
