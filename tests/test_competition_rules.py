@@ -17,7 +17,7 @@ def test_eligibility_and_deadlines_are_locked():
     assert e["region"] == "JAPAC"
     assert e["working_professionals_only"] is True
     assert e["students_eligible"] is False
-    assert e["team_formation_deadline"] == "2026-10-11"
+    assert e["team_formation_deadline"] == "2026-10-17"
     assert RULES["timeline"]["prototype_submission_deadline"] == "2026-10-18"
 
 
@@ -42,8 +42,13 @@ def test_submission_package_requirements_are_locked():
     assert s["working_prototype_required"] is True
     assert s["proposal_pdf_required"] is True
     assert s["public_demo_video_required"] is True
-    assert s["demo_video_max_minutes"] == 3
+    assert (s["demo_video_min_minutes"], s["demo_video_max_minutes"]) == (3, 4)
+    assert s["brief_description_max_characters"] == 1024
+    assert s["deck_pdf_max_mb"] == 5
     assert s["english_materials_required"] is True
+    assert s["public_repository_required"] is True
+    assert s["brief_description_required"] is True
+    assert s["prescribed_deck_template_required"] is True
 
 
 def test_judging_weights_total_100():

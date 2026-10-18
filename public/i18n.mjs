@@ -1,7 +1,42 @@
+import {khmer, khmerPhrases} from './khmer.mjs';
+import {bangla, banglaPhrases} from './bangla.mjs';
 const STORAGE_KEY = 'varelyx-language';
 
 export const translations = {
+  km: khmer,
   en: {
+    incidentCompact:'{hours} hours delay · {routes} routes',
+    cashCeiling:'Recomputed cash must match the plan and be at most {amount}',
+    reanalyze:'Reanalyze signal',
+    incidentApprovedSummary:'Supplier evidence reviewed. The proven response is saved as sandbox actions, with a receipt available in the audit trail.',
+    incidentReviewedSummary:'Supplier evidence reviewed. Compare the controlled recovery options, verify the constraints, and approve a current proven plan.',
+    stepInProgress:'Step in progress…',
+    walkthroughTitle:"Demo walkthrough · PASS → BLOCK → PASS → approve",
+    walkthroughProof:"Prove the balanced plan, test the unsafe option, then prove balanced again.",
+    walkthroughSave:"Approve the sandbox actions, reload, and check the saved receipt.",
+    operatorReview:"OPERATOR REVIEW",
+    cancelReview:"Cancel",
+    extractionDetails:"View extracted fields and source quotes",
+    sourceMessage:"Review full supplier message",
+    reviewCapacityTitle:"Confirm the supplier evidence",
+    reviewCapacityDescription:"Check the facts against the supplier message. Your confirmation sets the capacity used by the planner.",
+    confirmCapacity:"Confirm reviewed evidence",
+    approveDecisionTitle:"Approve this sandbox decision?",
+    approveDecisionDescription:"This creates saved action records for the current proven plan. No supplier is contacted and no real order is sent.",
+    confirmApproval:"Approve & save sandbox actions",
+    resetDecisionTitle:"Start a new decision?",
+    resetDecisionDescription:"The current sandbox actions will be archived. Saved approval receipts will be retained.",
+    confirmReset:"Reset controlled scenario",
+    awaitingEvidence:"Add a supplier message to start. Analysis will separate supported facts from missing information.",
+    analysisComplete:"LIVE GEMINI VERIFIED · Review required.",
+    analysisReviewed:"LIVE GEMINI VERIFIED · Operator reviewed.",
+    signalEdited:"The source message changed. Analyze it again before reviewing or approving.",
+    scenarioReady:"Confirmed evidence · strategies use the same controlled assumptions.",
+    scenarioWaiting:"Preliminary scenario · review supplier evidence and confirm capacity before using these estimates.",
+    proofHistoryTitle:"Saved proof history",
+    proofHistoryEmpty:"Proof results will appear here after a verified save.",
+    connectionHelp:"Connection details",
+    connectionHelpText:"Connect to Firebase before analyzing evidence or saving a decision.",
     language:'Language',
     topKicker:'LIVE DECISION WORKSPACE',
     topScenario:'Bangladesh continuity scenario',
@@ -44,6 +79,13 @@ export const translations = {
     stateReview:'Evidence review required',
     stateProof:'Ready for Proof Gate',
     stateApproval:'Ready for human approval',
+    stateApproved:'Approved · sandbox actions saved',
+    savedEvidenceHelp:'Evidence saved. Review the extracted facts and confirm capacity before running Proof Gate.',
+    staleHelp:'Signal edited. Analyze it again and review the evidence before running Proof Gate.',
+    capacitySuggested:'Gemini suggestion: {value} cases — unconfirmed. Enter the capacity you have verified below.',
+    capacitySource:'Source: “{quote}”',
+    capacityConfirmed:'Operator confirmed and saved: {value} cases.',
+    capacityUnknown:'Capacity is unknown. Enter a supplier-confirmed value; an empty field is not zero.',
     stateStale:'Proof is stale',
     stateBlocked:'Blocked by Proof Gate',
     stateHeld:'Held by Proof Gate',
@@ -129,6 +171,116 @@ export const translations = {
     none:'None'
   },
   bn: {
+    "Compare supply, cash, and stockout risk.":"সরবরাহ, নগদ অর্থ ও মজুত ফুরানোর ঝুঁকি তুলনা করুন।",
+    "Check the proof and quantities before approving.":"অনুমোদনের আগে প্রুফ ও পরিমাণ যাচাই করুন।",
+    "Your approval creates sandbox records only.":"আপনার অনুমোদনে কেবল পরীক্ষামূলক রেকর্ড তৈরি হবে।",
+    "Review the records or export your decision evidence.":"রেকর্ড দেখুন অথবা সিদ্ধান্তের প্রমাণ রপ্তানি করুন।",
+    "Follow the evidence, proof results, and human approvals.":"তথ্য, প্রুফের ফল ও মানুষের অনুমোদন অনুসরণ করুন।",
+    "Plan overview":"পরিকল্পনার সারাংশ",
+    "Verification summary":"যাচাইয়ের সারাংশ",
+    "Saved action summary":"সেভ করা কাজের সারাংশ",
+    "Audit summary":"অডিটের সারাংশ",
+    "Not confirmed":"নিশ্চিত হয়নি",
+    "Supplier B · Thursday":"Supplier B · বৃহস্পতিবার",
+    "Cash ceiling":"নগদ অর্থের সীমা",
+    "Controlled policy":"নির্ধারিত পরীক্ষামূলক নীতি",
+    "Candidate":"নির্বাচিত পরিকল্পনা",
+    "Prove before approval":"অনুমোদনের আগে প্রুফ",
+    "Checks":"যাচাই",
+    "Previous proof":"আগের প্রুফ",
+    "Latest proof":"সর্বশেষ প্রুফ",
+    "Blocking checks":"বাধা সৃষ্টিকারী যাচাই",
+    "Reanalysis required":"আবার বিশ্লেষণ প্রয়োজন",
+    "HOLD or BLOCK":"HOLD অথবা BLOCK",
+    "Proof record":"প্রুফের রেকর্ড",
+    "Available":"আছে",
+    "Not generated":"তৈরি হয়নি",
+    "Verified":"যাচাইকৃত",
+    "Unverified":"যাচাই হয়নি",
+    "Not saved":"সেভ হয়নি",
+    "Connecting":"সংযোগ হচ্ছে",
+    "Saved records":"সেভ করা রেকর্ড",
+    "Sandbox actions":"পরীক্ষামূলক কাজ",
+    "Server read-back":"সার্ভার থেকে পুনরায় পাঠ",
+    "Session state":"সেশনের অবস্থা",
+    "Execution mode":"কাজের ধরন",
+    "Sandbox":"পরীক্ষামূলক",
+    "No orders sent":"কোনো অর্ডার পাঠানো হয়নি",
+    "Saved events":"সেভ করা ঘটনা",
+    "Decision history":"সিদ্ধান্তের ইতিহাস",
+    "Approved receipts":"অনুমোদিত সিদ্ধান্তের রসিদ",
+    "Receipt archive":"রসিদের সংরক্ষণাগার",
+    "Current decision":"বর্তমান সিদ্ধান্ত",
+    "Not run":"চালানো হয়নি",
+    "Stale":"পুরোনো",
+    "Balanced":"ভারসাম্যপূর্ণ",
+    "cases":"কেস",
+
+    "Helpful details":"সহায়ক তথ্য",
+    "Delay":"বিলম্ব",
+    "Confirmed capacity":"নিশ্চিত সরবরাহের পরিমাণ",
+    "What happens next":"পরের ধাপগুলো",
+    "Review the facts":"তথ্য যাচাই করুন",
+    "Check the details Gemini extracts.":"Gemini-এর পাওয়া তথ্য যাচাই করুন।",
+    "Fill the gaps using supplier-confirmed information.":"সাপ্লায়ারের নিশ্চিত করা তথ্য দিয়ে ঘাটতি পূরণ করুন।",
+    "Compare plans, check proof, then approve sandbox actions.":"পরিকল্পনা তুলনা ও প্রুফ যাচাই করে পরীক্ষামূলক কাজ অনুমোদন করুন।",
+    "Verify and approve":"যাচাই ও অনুমোদন করুন",
+
+    "Workflow help":"কাজের ধাপের সহায়তা",
+    "About source analysis":"তথ্য বিশ্লেষণ সম্পর্কে",
+    "About capacity confirmation":"পরিমাণ নিশ্চিতকরণ সম্পর্কে",
+    "About recovery plans":"পুনরুদ্ধার পরিকল্পনা সম্পর্কে",
+    "About the unsafe test":"অনিরাপদ পরীক্ষাটি সম্পর্কে",
+    "About Proof Gate":"Proof Gate সম্পর্কে",
+    "About sandbox approval":"পরীক্ষামূলক অনুমোদন সম্পর্কে",
+    "About saved actions":"সেভ করা কাজ সম্পর্কে",
+    "About the decision audit":"সিদ্ধান্তের অডিট সম্পর্কে",
+    "Scenario data":"পরিস্থিতির তথ্য",
+    "Recorded events":"রেকর্ড করা ঘটনা",
+    "Reviewed evidence":"রিভিউ করা তথ্য",
+    "Preliminary estimates":"প্রাথমিক হিসাব",
+    "Working…":"কাজ চলছে…",
+    "Ready for approval":"অনুমোদনের জন্য প্রস্তুত",
+    "Evidence changed":"তথ্য বদলেছে",
+    "Blocked by proof":"প্রুফে আটকে গেছে",
+    "Proof required":"প্রুফ প্রয়োজন",
+
+    'Supplier message':'সাপ্লায়ারের বার্তা',
+    'AI extracts facts. You review the decision.':'AI তথ্য বের করে। সিদ্ধান্ত আপনি যাচাই করেন।',
+    'Extracted facts':'পাওয়া তথ্য',
+    'Confirm capacity':'সরবরাহের পরিমাণ নিশ্চিত করুন',
+    'Available by Thursday':'বৃহস্পতিবার সরবরাহযোগ্য পরিমাণ',
+    'Enter a supplier-confirmed quantity.':'সাপ্লায়ারের নিশ্চিত করা পরিমাণ লিখুন।',
+    reanalyze:'সিগন্যাল আবার বিশ্লেষণ করুন',
+    incidentApprovedSummary:'সাপ্লায়ারের তথ্য রিভিউ হয়েছে। যাচাই করা response sandbox actions হিসেবে সেভ হয়েছে; audit trail-এ receipt আছে।',
+    incidentReviewedSummary:'সাপ্লায়ারের তথ্য রিভিউ হয়েছে। Controlled recovery options তুলনা করে constraints যাচাই করুন, তারপর বর্তমান proven plan অনুমোদন করুন।',
+    stepInProgress:'বর্তমান ধাপ চলছে…',
+    walkthroughTitle:"ডেমো ধাপ · PASS → BLOCK → PASS → অনুমোদন",
+    walkthroughProof:"Balanced plan যাচাই করুন, unsafe option পরীক্ষা করুন, তারপর balanced plan আবার যাচাই করুন।",
+    walkthroughSave:"Sandbox actions অনুমোদন করুন, reload করে saved receipt দেখুন।",
+    operatorReview:"অপারেটর রিভিউ",
+    cancelReview:"বাতিল",
+    extractionDetails:"পাওয়া তথ্য ও উৎসের উদ্ধৃতি দেখুন",
+    sourceMessage:"সাপ্লায়ারের সম্পূর্ণ বার্তা দেখুন",
+    reviewCapacityTitle:"সাপ্লায়ারের তথ্য নিশ্চিত করুন",
+    reviewCapacityDescription:"সাপ্লায়ারের বার্তার সঙ্গে তথ্য মিলিয়ে দেখুন। আপনার নিশ্চিত করা capacity পরিকল্পনায় ব্যবহার হবে।",
+    confirmCapacity:"রিভিউ করা তথ্য নিশ্চিত করুন",
+    approveDecisionTitle:"এই sandbox সিদ্ধান্ত অনুমোদন করবেন?",
+    approveDecisionDescription:"বর্তমান যাচাই করা পরিকল্পনার action records সেভ হবে। সাপ্লায়ারের কাছে কোনো বাস্তব অর্ডার যাবে না।",
+    confirmApproval:"Sandbox actions অনুমোদন ও সেভ করুন",
+    resetDecisionTitle:"নতুন সিদ্ধান্ত শুরু করবেন?",
+    resetDecisionDescription:"বর্তমান sandbox actions আর্কাইভ হবে। সেভ করা approval receipts রাখা হবে।",
+    confirmReset:"Controlled scenario রিসেট করুন",
+    awaitingEvidence:"শুরু করতে সাপ্লায়ারের বার্তা লিখুন। বিশ্লেষণে জানা ও অনুপস্থিত তথ্য আলাদা হবে।",
+    analysisComplete:"LIVE GEMINI VERIFIED · রিভিউ প্রয়োজন।",
+    analysisReviewed:"LIVE GEMINI VERIFIED · অপারেটর রিভিউ করেছেন।",
+    signalEdited:"উৎসের বার্তা বদলেছে। রিভিউ বা অনুমোদনের আগে আবার বিশ্লেষণ করুন।",
+    scenarioReady:"তথ্য নিশ্চিত · একই controlled assumptions-এ পরিকল্পনা তুলনা করা হচ্ছে।",
+    scenarioWaiting:"প্রাথমিক scenario · ফল ব্যবহারের আগে তথ্য রিভিউ করে capacity নিশ্চিত করুন।",
+    proofHistoryTitle:"সেভ করা প্রুফ ইতিহাস",
+    proofHistoryEmpty:"যাচাই করে সেভ করার পরে প্রুফের ফল এখানে দেখা যাবে।",
+    connectionHelp:"সংযোগের তথ্য",
+    connectionHelpText:"তথ্য বিশ্লেষণ বা সিদ্ধান্ত সেভ করার আগে Firebase-এ সংযুক্ত হন।",
     language:'ভাষা',
     topKicker:'লাইভ সিদ্ধান্ত কর্মক্ষেত্র',
     topScenario:'বাংলাদেশ কনটিনিউটি সিনারিও',
@@ -171,6 +323,13 @@ export const translations = {
     stateReview:'এভিডেন্স রিভিউ প্রয়োজন',
     stateProof:'Proof Gate-এর জন্য প্রস্তুত',
     stateApproval:'মানব অনুমোদনের জন্য প্রস্তুত',
+    stateApproved:'অনুমোদিত · sandbox actions সেভ হয়েছে',
+    savedEvidenceHelp:'এভিডেন্স সেভ হয়েছে। Proof Gate চালানোর আগে তথ্য রিভিউ করে capacity নিশ্চিত করুন।',
+    staleHelp:'সিগন্যাল বদলেছে। আবার বিশ্লেষণ ও এভিডেন্স রিভিউ করে Proof Gate চালান।',
+    capacitySuggested:'Gemini-এর প্রস্তাব: {value} কেস — অনিশ্চিত। নিচে যাচাই করা capacity লিখুন।',
+    capacitySource:'উৎস: “{quote}”',
+    capacityConfirmed:'অপারেটর নিশ্চিত করেছেন এবং সেভ হয়েছে: {value} কেস।',
+    capacityUnknown:'Capacity অজানা। সাপ্লায়ারের নিশ্চিত করা পরিমাণ লিখুন; খালি ঘর শূন্য নয়।',
     stateStale:'প্রুফ পুরোনো হয়েছে',
     stateBlocked:'Proof Gate দ্বারা BLOCK',
     stateHeld:'Proof Gate দ্বারা HOLD',
@@ -257,19 +416,23 @@ export const translations = {
   }
 };
 
+Object.assign(translations.bn, bangla, banglaPhrases);
+translations.km = {...khmerPhrases, ...khmer};
+
 let locale = 'en';
 
 export function detectInitialLocale() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'bn' || saved === 'en') return saved;
+    if (['en','bn','km'].includes(saved)) return saved;
   } catch {}
   const languages = navigator.languages || [navigator.language || 'en'];
+  if(languages.some(value=>String(value).toLowerCase().startsWith('km')))return 'km';
   return languages.some(value => String(value).toLowerCase().startsWith('bn')) ? 'bn' : 'en';
 }
 
 export function setLocale(next) {
-  locale = next === 'bn' ? 'bn' : 'en';
+  locale = ['en','bn','km'].includes(next) ? next : 'en';
   document.documentElement.lang = locale;
   try { localStorage.setItem(STORAGE_KEY, locale); } catch {}
   applyTranslations();
@@ -277,16 +440,20 @@ export function setLocale(next) {
 }
 
 export function getLocale() { return locale; }
-export function t(key, vars = {}) {
-  const raw = translations[locale]?.[key] ?? translations.en[key] ?? key;
+export function translate(key, language = locale, vars = {}) {
+  const raw = translations[language]?.[key] ?? translations.en[key] ?? key;
   return String(raw).replace(/\{(\w+)\}/g, (_, name) => String(vars[name] ?? '{'+name+'}'));
 }
+export function t(key, vars = {}) { return translate(key, locale, vars); }
 
 export function applyTranslations() {
+  document.title = t('Varelyx · Retail recovery');
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const value = t(el.dataset.i18n);
     if (value) el.textContent = value;
   });
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>el.setAttribute('title',t(el.dataset.i18nTitle)));
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));
   const select = document.querySelector('#languageSelect');
   if (select) {
     select.value = locale;
@@ -301,4 +468,51 @@ export function initI18n() {
   if (select) select.addEventListener('change', event => setLocale(event.target.value));
   document.documentElement.lang = locale;
   return locale;
+}
+
+// Translate application-owned presentation strings only, never source/receipt data.
+export function ui(value, language = locale) {
+  const text = String(value ?? '');
+  if (language === 'en') return text;
+  const dictionary = translations[language] ?? {};
+  if (dictionary[text]) return dictionary[text];
+  const patterns = [
+    [/^FIREBASE SAVE VERIFIED — revision (\d+)\.$/, 'FIREBASE SAVE VERIFIED — revision {revision}.', 'revision'],
+    [/^([\d,.]+)-hour delivery delay$/, '{count}-hour delivery delay', 'count'],
+    [/^([\d,.]+) cases$/, '{count} cases', 'count'],
+    [/^([\d,.]+) hours$/, '{count} hours', 'count'],
+    [/^([\d,.]+) routes$/, '{count} routes', 'count'],
+    [/^([\d,.]+)% confidence$/, '{count}% confidence', 'count'],
+    [/^SHA-256 receipt: (.+)$/, 'SHA-256 receipt', 'receipt'],
+    [/^Receipt (.+)$/, 'Receipt', 'receipt'],
+    [/^Same fixed demand scenario set\. Route cap: ([\d,.]+) cases under the disclosed controlled policy\.$/, 'Same fixed demand scenario set. Route cap: {count} cases under the disclosed controlled policy.', 'count'],
+    [/^Connection failed: (.+)\. Check Anonymous Auth, database URL\/rules, App Check domains and network access\.$/, 'Connection failed: {error}. Check Anonymous Auth, database URL/rules, App Check domains and network access.', 'error'],
+    [/^SAVE NOT VERIFIED — (.+)$/, 'SAVE NOT VERIFIED — {error}', 'error'],
+    [/^Firebase save NOT VERIFIED\. Reload before retrying\. (.+)$/, 'Firebase save NOT VERIFIED. Reload before retrying. {error}', 'error'],
+    [/^Firebase HTTP (\d+); check Auth, App Check and database rules$/, 'Firebase HTTP {code}; check Auth, App Check and database rules', 'code'],
+    [/^Approval blocked: (.+)$/, 'Approval blocked: {status}', 'status'],
+    [/^Unsupported field\/unit or ambiguous source: (.+)\. Clarify the supplier message and analyze again\.$/, 'Unsupported field/unit or ambiguous source: {field}. Clarify the supplier message and analyze again.', 'field'],
+    [/^Invalid field: (.+)$/, 'Invalid field: {field}', 'field'],
+    [/^Ungrounded source: (.+)$/, 'Ungrounded source: {field}', 'field'],
+    [/^Unsupported number: (.+)$/, 'Unsupported number: {field}', 'field']
+  ];
+  for (const [pattern, key, variable] of patterns) {
+    const match = text.match(pattern);
+    if (match) {
+      if (variable === 'receipt') return translate(key, language)+': '+match[1];
+      const field = {delay_hours:'Delivery delay',affected_routes:'Affected routes',capacity_confirmed:'Supplier capacity'}[match[1]] ?? match[1];
+      return translate(key, language, {[variable]:['error','field'].includes(variable) ? ui(field, language) : match[1]});
+    }
+  }
+  if (/ · (PASS|BLOCK|HOLD|STALE)$/.test(text)) return text.replace(/^(.*) · (PASS|BLOCK|HOLD|STALE)$/, (_, label, code) => ui(label,language)+' · '+code);
+  if (/^(HOLD|BLOCK) — /.test(text)) return text.replace(/^(HOLD|BLOCK) — (.*)$/, (_, code, reasons) => code+' — '+ui(reasons,language));
+  if (text.includes('; ')) return text.split('; ').map(part=>ui(part,language)).join('; ');
+  return text;
+}
+
+// Translate only presentation containers; source inputs, quotes and evidence JSON are excluded.
+export function localizeContent(root) {
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+  for(const node of nodes){if(node.parentElement?.closest('[data-verbatim],textarea,input,pre,code,#geminiResult'))continue;const original=node.textContent;const text=original.trim();if(text)node.textContent=original.replace(text,ui(text));}
 }
